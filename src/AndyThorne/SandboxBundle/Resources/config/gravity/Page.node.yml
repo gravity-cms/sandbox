@@ -1,0 +1,59 @@
+routing:
+  route: sandbox_node
+  extendable: true
+
+fields:
+  body:
+    type: text
+    dynamic: true
+    options:
+      limit: 1
+      char_min: 10
+      char_max: 100
+      # ...
+    widget:
+      type: text.formatted
+      options:
+        default: 'Default Text'
+
+  rating:
+    type: number
+    dynamic: true
+    options:
+      limit: 1
+    widget:
+      type: number.number_box
+      options:
+        default: 1
+
+  urls:
+    type: text
+    dynamic: true
+    options:
+      limit: 3
+      # ...
+    widget:
+      type: text.formatted
+      options:
+        default: 'Default Text'
+
+  signedOff:
+    type: boolean
+    options:
+      limit: 1
+    widget:
+      type: boolean.checkbox
+
+  #team:
+  #  type: choice
+  #  dynamic: true
+  #  options:
+  #    choices:
+  #      liverpool: Liverpool
+  #      chelsea: Chelsea
+  #      manu: Man Utd
+  #    multiple: true
+  #  widget:
+  #    type: choice.select
+  #    options:
+  #      expanded: false

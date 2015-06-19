@@ -1,0 +1,64 @@
+parameters:
+  # Theming
+  gravity_admin.theme_manager.class:  Gravity\AdminBundle\ThemeManager
+  gravity_admin.theme_loader.class:   Gravity\AdminBundle\Twig\Loader\ThemeLoader
+
+  # override the asset factory
+  assetic.asset_factory.class:        Gravity\AdminBundle\Assetic\Factory\GravityAssetFactory
+  gravity_admin.asset_manager.class:    Gravity\AdminBundle\Assetic\GravityAssetManager
+
+  gravity_admin.twig.assets_extension:  Gravity\AdminBundle\Twig\CoreExtension
+
+services:
+
+  #
+  # Theming
+  gravity_admin.theme_manager:
+    class: %gravity_admin.theme_manager.class%
+
+  twig.loader.theme_loader:
+    class: %gravity_admin.theme_loader.class%
+    arguments:
+      - @gravity_admin.theme_manager
+      - @templating.locator.theme_filesystem_locator
+      - @templating.name_parser
+    tags:
+      - { name: twig.loader }
+
+  #
+  # Template loader!
+  templating.locator.theme_locator:
+    class: Gravity\AdminBundle\Templating\Locator\ThemeLocator
+    arguments:
+      - @gravity_admin.theme_manager
+
+  templating.locator.theme_filesystem_locator:
+    class: %templating.locator.class%
+    arguments:
+      - @templating.locator.theme_locator
+      - %kernel.cache_dir%
+
+  templating.loader.theme_loader:
+    class: %templating.loader.filesystem.class%
+    arguments:
+      - @templating.locator.theme_locator
+
+  # Default Theme
+  gravity_admin.theme.gravity_admin:
+    class: Gravity\AdminBundle\Theme\GravityAdmin\GravityAdminTheme
+    tags:
+      - { name: gravity_admin.theme, alias: gravity_admin }
+
+  #
+  # Asset manager
+  gravity_admin.asset_manager:
+    class: %gravity_admin.asset_manager.class%
+
+  #
+  # Twig Functions for plugins
+  gravity_admin.twig.assets_core_extension:
+    class: %gravity_admin.twig.assets_extension%
+    arguments:
+      - @gravity_admin.asset_manager
+    tags:
+      - { name: twig.extension }

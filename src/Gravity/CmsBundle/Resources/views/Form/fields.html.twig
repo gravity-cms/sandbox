@@ -1,0 +1,58 @@
+{% macro field_collection_row(widget) %}
+    {% spaceless %}
+        <li class="field-group-item">
+            <div class="field-controls">
+                <div class="field-sort-icon">
+                    <i class="fa fa-arrows"></i>
+                </div>
+                <button type="button" class="btn btn-danger form-delete-widget">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="field-group-item-widget">
+                {{ form_widget(widget) }}
+            </div>
+        </li>
+    {% endspaceless %}
+{% endmacro field_collection_row %}
+
+{% block field_collection_widget %}
+    {% set attr = attr|merge({'class': attr.class|default('') ~ ' field-group'}) %}
+    <div {{ block('widget_container_attributes') }}>
+        {% if form.vars.limit == 1 %}
+            {{ form_widget(form) }}
+        {% else %}
+            <div class="field-group-header">
+                <div class="field-control-block">
+                    <button type="button" class="form-add-widget btn btn-primary btn-xs"
+                            data-prototype="{{ _self.field_collection_row(form.vars.prototype)|e }}"
+                            data-widget-type="{{ form.vars.field.name }}"
+                            data-limit="{{ form.vars.limit }}">
+                        Add
+                    </button>
+                </div>
+            </div>
+            <ul class="field-group-list">
+                {% for widget in form %}
+                    {{ _self.field_collection_row(widget) }}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+{% endblock field_collection_widget %}
+
+{% block sonata_formatter_type_widget %}
+
+    <!-- widget: sonata_formatter_type_widget -->
+    <div class="sonata-formatter-widget"
+            data-config="{{ ckeditor_configuration|json_encode }}">
+        <div style="margin-bottom: 5px;">
+            {{ form_widget(form.children[format_field]) }}
+            {% if format_field_options.choices|length > 1 %}
+                <i>{{ "please_select_format_method"|trans({}, "SonataFormatterBundle") }}</i>
+            {% endif %}
+        </div>
+
+        {{ form_widget(form.children[source_field]) }}
+    </div>
+{% endblock sonata_formatter_type_widget %}

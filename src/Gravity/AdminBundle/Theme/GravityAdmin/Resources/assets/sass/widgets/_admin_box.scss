@@ -1,0 +1,7 @@
+.panel-admin {
+  @include panel-variant(#e2e2e2, #efefef, #23272D, lighten(#23272D, 20%));
+
+  .panel-title {
+    color: #efefef;
+  }
+}

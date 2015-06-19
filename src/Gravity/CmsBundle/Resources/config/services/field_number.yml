@@ -1,0 +1,12 @@
+
+services:
+  gravity_cms.field.number:
+    class: Gravity\CmsBundle\Field\Type\Number\NumberField
+    tags:
+      - { name: gravity_cms.field }
+
+
+  gravity_cms.field.number.widget.number_box:
+    class: Gravity\CmsBundle\Field\Type\Number\Widget\NumberBox\NumberBoxWidget
+    tags:
+      - { name: gravity_cms.field.widget }

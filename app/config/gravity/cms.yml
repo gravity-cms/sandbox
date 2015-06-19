@@ -1,0 +1,43 @@
+twig:
+    form_themes:
+      - GravityCmsBundle:Form:fields.html.twig
+
+sonata_admin:
+    title:      Gravity
+
+#    dashboard:
+#        groups:
+#            gravity_cms.admin.group.content:
+#                label:           gravity_cms_content
+#                label_catalogue: GravityCmsBundle
+#                icon:            '<i class="fa fa-th"></i>'
+#                items: []
+
+sonata_block:
+    default_contexts: [cms]
+    blocks:
+        # Enable the SonataAdminBundle block
+        sonata.admin.block.admin_list:
+            contexts:   [admin]
+        # Your other blocks
+
+gravity_cms:
+  user_entity: AndyThorne\SandboxBundle\Entity\User
+  node_types:
+    page: AndyThorne\SandboxBundle\Entity\Page
+
+ivory_ck_editor:
+    default_config: default
+    configs:
+        default:
+            extraPlugins: 'divarea'
+            removeButtons: 'About,Maximize'
+            removePlugins: 'elementspath'
+            scayt_autoStartup: true
+    plugins:
+        divarea:
+            path: /bundles/gravitycms/vendor/ckeditor-plugins/divarea/
+            filename: plugin.js
+        wordcount:
+            path: /bundles/gravitycms/vendor/ckeditor-plugins/wordcount/
+            filename: plugin.js

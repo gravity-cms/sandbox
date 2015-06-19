@@ -1,0 +1,51 @@
+imports:
+  - { resource: services/admin.yml }
+  - { resource: services/field.yml }
+  - { resource: services/field_text.yml }
+  - { resource: services/field_number.yml }
+  - { resource: services/field_choice.yml }
+  - { resource: services/field_boolean.yml }
+
+services:
+
+#    gravity_cms.admin.node:
+#        class: Gravity\CmsBundle\Admin\NodeAdmin
+#        arguments: [~, Gravity\CmsBundle\Entity\Node, SonataAdminBundle:CRUD]
+#        tags:
+#            - {name: sonata.admin, manager_type: orm, group: admin, label: Node}
+
+  gravity_cms.routing.cms_route_provider:
+    class: Gravity\CmsBundle\Routing\Provider\CmsRouteProvider
+    arguments:
+      - @doctrine.orm.default_entity_manager
+
+  #
+  # Doctrine - Map node listener
+  gravity_node.doctrine.node_listener:
+    class: Gravity\CmsBundle\Doctrine\EventListener\NodeEventListener
+    arguments:
+      - @service_container
+    tags:
+      - { name: doctrine.event_subscriber }
+
+  gravity_cms.routing.node_route_manager:
+    class: Gravity\CmsBundle\Routing\NodeRouteManager
+    arguments:
+      - @router
+
+  gravity_cms.routing.node_route_builder:
+    class: Gravity\CmsBundle\Routing\RouteBuilder
+    arguments:
+      - @gravity_cms.routing.node_route_manager
+      - @gravity_cms.routing.slugger
+      - @gravity_cms.field_manager
+
+  gravity_cms.routing.slugger:
+    class: Cocur\Slugify\Slugify
+
+  #
+  # form
+  gravity_cms.form.type.basic_route:
+    class: Gravity\CmsBundle\Form\Type\BasicRouteType
+    tags:
+      - { name: form.type, alias: basic_route }

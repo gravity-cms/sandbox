@@ -1,0 +1,3 @@
+gravity_cms_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: GravityCmsBundle:Default:index }

@@ -1,0 +1,66 @@
+framework:
+    templating:
+        loaders:
+          - templating.loader.filesystem
+          - templating.loader.theme_loader
+
+sonata_admin:
+    templates:
+        # default global templates
+        layout:  GravityAdminBundle::gravity_layout.html.twig
+
+    options:
+        use_icheck: false
+
+    assets:
+        javascripts: []
+        stylesheets: []
+
+cmf_routing:
+  chain:
+    routers_by_id:
+      cmf_routing.dynamic_router: 300
+      router.default: 200
+  dynamic:
+    enabled: true
+    route_provider_service_id: gravity_cms.routing.cms_route_provider
+
+assetic:
+    bundles:
+      - GravityAdminBundle
+
+hearsay_require_js:
+    base_url: /js
+    base_dir: %kernel.root_dir%/../node_modules/requirejs/bin/
+    paths:
+        jquery:
+            location: ../bundles/sonatacore/vendor/jquery/dist/jquery.min
+            external: true
+        jqueryui:
+            location: //code.jquery.com/ui/1.11.4/jquery-ui.min
+            external: true
+        bootstrap:
+            location: ../bundles/sonatacore/vendor/bootstrap/dist/js/bootstrap.min
+            external: true
+        select2:
+            location: ../bundles/sonatacore/vendor/select2/select2.min
+            external: true
+        treeview:
+            location: ../bundles/sonataadmin/treeview
+            external: true
+        moment:
+            location: ../bundles/sonatacore/vendor/moment/min/moment.min
+            external: true
+
+    shim:
+        bootstrap:
+            deps: [jquery]
+            exports: Bootstrap
+        jqueryui:
+            deps: [jquery]
+            exports: jQuery
+        select2:
+            deps: [jquery, bootstrap]
+            exports: Select2
+        treeview:
+            deps: [jquery]

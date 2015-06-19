@@ -1,0 +1,49 @@
+fos_user:
+    db_driver:      orm # can be orm or odm
+    firewall_name:  main
+    user_class:     AndyThorne\SandboxBundle\Entity\User
+
+
+    group:
+        group_class:   AndyThorne\SandboxBundle\Entity\Group
+        group_manager: sonata.user.orm.group_manager                    # If you're using doctrine orm (use sonata.user.mongodb.user_manager for mongodb)
+
+    service:
+        user_manager: sonata.user.orm.user_manager                      # If you're using doctrine orm (use sonata.user.mongodb.group_manager for mongodb)
+
+doctrine:
+
+    dbal:
+        types:
+            json: Sonata\Doctrine\Types\JsonType
+
+sonata_user:
+    security_acl: true
+    manager_type: orm # can be orm or mongodb
+    class: # Entity Classes
+        user:  AndyThorne\SandboxBundle\Entity\User
+        group: AndyThorne\SandboxBundle\Entity\Group
+
+sonata_block:
+    blocks:
+        #...
+        sonata.user.block.menu:    # used to display the menu in profile pages
+        sonata.user.block.account: # used to display menu option (login option)
+
+# app/config/security.yml
+security:
+    # [...]
+
+    encoders:
+        FOS\UserBundle\Model\UserInterface: sha512
+
+    acl:
+        connection: default
+
+doctrine:
+    orm:
+        entity_managers:
+            default:
+                mappings:
+#                    ApplicationSonataUserBundle: ~
+                    SonataUserBundle: ~

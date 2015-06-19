@@ -1,0 +1,31 @@
+services:
+
+  gravity_cms.field_manager:
+    class: Gravity\CmsBundle\Field\FieldManager
+
+  gravity_cms.field.doctrine.mapping_subscriber:
+    class: Gravity\CmsBundle\Field\Doctrine\FieldMappingSubscriber
+    arguments:
+      - @gravity_cms.field_manager
+      - %gravity_cms.field_mappings%
+      - %gravity_cms.user_entity%
+    tags:
+      - { name: doctrine.event_subscriber, connection: default }
+
+  gravity_cms.form.field_widget:
+    class: Gravity\CmsBundle\Form\Type\FieldWidgetType
+    tags:
+      - { name: form.type, alias: field_widget }
+
+  gravity_cms.form.field_collection:
+    class: Gravity\CmsBundle\Form\Type\FieldCollectionType
+    tags:
+      - { name: form.type, alias: field_collection }
+
+  gravity_cms.twig.field_extension:
+    class: Gravity\CmsBundle\Field\Twig\FieldExtension
+    arguments:
+      - @gravity_cms.field_manager
+    public: false
+    tags:
+      - { name: twig.extension }

@@ -1,0 +1,21 @@
+services:
+
+#    sonata.admin.post:
+#        class: Gravity\CmsBundle\Admin\NodeAdmin
+#        tags:
+#            - { name: sonata.admin, manager_type: orm, group: "Content", label: "Post" }
+#        arguments:
+#            - ~
+#            - Gravity\CmsBundle\Admin\NodeAdmin
+#            - GravityCmsBundle:NodeAdmin
+#        calls:
+#            - [ setFieldManager, [@gravity_cms.field_manager]]
+
+
+#    gravity_cms.admin.node:
+#        class: Gravity\CmsBundle\Admin\NodeAdmin
+#        arguments: [~, Gravity\CmsBundle\Entity\Node, GravityCmsBundle:NodeAdmin]
+#        tags:
+#            - {name: sonata.admin, manager_type: orm, group: admin, label: Node}
+#        calls:
+#            - [ setFieldManager, [@gravity_cms.field_manager]]

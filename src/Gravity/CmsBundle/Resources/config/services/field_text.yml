@@ -1,0 +1,15 @@
+services:
+  gravity_cms.field.text:
+    class: Gravity\CmsBundle\Field\Type\Text\TextField
+    tags:
+      - { name: gravity_cms.field }
+
+  gravity_cms.field.text.widget.formatted:
+    class: Gravity\CmsBundle\Field\Type\Text\Widget\Formatted\FormattedWidget
+    tags:
+      - { name: gravity_cms.field.widget }
+
+  gravity_cms.field.text.widget.formatted.form:
+    class: Gravity\CmsBundle\Field\Type\Text\Widget\Formatted\FormattedWidgetForm
+    tags:
+      - { name: form.type, alias: gravity_field_text_widget }

@@ -1,0 +1,6 @@
+andy_thorne_sandbox_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: AndyThorneSandboxBundle:Default:index }
+
+sandbox_node:
+    path: /{title}
