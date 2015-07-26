@@ -1,0 +1,18 @@
+fields: ~
+#    description:
+#        type: text
+#        dynamic: true
+#        options:
+#            limit: 1
+#            # ...
+#        widget:
+#            type: text.formatted
+#            options:
+#                default: 'Default Text'
+
+search:
+    handler: Gravity\CmsBundle\Search\Handler\TaxonomyHandler
+
+routing:
+    path: /category/{title}
+    extendable: true

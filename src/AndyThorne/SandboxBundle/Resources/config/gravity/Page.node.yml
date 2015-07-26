@@ -1,8 +1,33 @@
 routing:
-  route: sandbox_node
+  path: /{title}
   extendable: true
 
+search:
+  handler: Gravity\CmsBundle\Search\Handler\NodeHandler
+
 fields:
+  category:
+    type: reference
+    options:
+      required: false
+      limit: 1
+      entity: AndyThorne\SandboxBundle\Entity\Category
+    widget:
+      type: select
+      options: ~
+
+  tags:
+    type: reference
+    options:
+      required: false
+      limit: 50
+      entity: AndyThorne\SandboxBundle\Entity\Tag
+    widget:
+      type: autocomplete
+      options:
+        handler: taxonomy
+        allow_new: true
+
   body:
     type: text
     dynamic: true
@@ -21,6 +46,7 @@ fields:
     dynamic: true
     options:
       limit: 1
+      searchable: false
     widget:
       type: number.number_box
       options:
@@ -33,16 +59,28 @@ fields:
       limit: 3
       # ...
     widget:
-      type: text.formatted
+      type: text.unformatted
       options:
-        default: 'Default Text'
+        type: url
 
   signedOff:
     type: boolean
     options:
       limit: 1
+      searchable: false
     widget:
       type: boolean.checkbox
+
+  parent:
+    type: reference
+    options:
+      required: false
+      limit: 1
+      entity: AndyThorne\SandboxBundle\Entity\Page
+    widget:
+      type: select
+      options: ~
+        #expanded: true
 
   #team:
   #  type: choice

@@ -3,9 +3,10 @@
 namespace AndyThorne\SandboxBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Gravity\CmsBundle\Entity\FieldBoolean;
 use Gravity\CmsBundle\Entity\FieldText;
 use Gravity\CmsBundle\Entity\Node;
-use Gravity\CmsBundle\Field\Type\Boolean\BooleanField;
+use Gravity\TagBundle\Entity\Tag;
 
 /**
  * Class Page
@@ -15,6 +16,16 @@ use Gravity\CmsBundle\Field\Type\Boolean\BooleanField;
  */
 class Page extends Node
 {
+    /**
+     * @var Tag
+     */
+    protected $category;
+
+    /**
+     * @var Tag[]
+     */
+    protected $tags;
+
     /**
      * @var string
      */
@@ -35,16 +46,37 @@ class Page extends Node
     protected $team;
 
     /**
-     * @var BooleanField[]
+     * @var FieldBoolean
      */
     protected $signedOff;
 
+    /**
+     * @var Page
+     */
+    protected $parent;
+
     function __construct()
     {
-        $this->urls      = new ArrayCollection();
-        $this->signedOff = new ArrayCollection();
+        parent::__construct();
+        $this->urls = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
+    /**
+     * @return Tag
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param Tag $category
+     */
+    public function setCategory(Tag $category)
+    {
+        $this->category = $category;
+    }
 
     /**
      * @return string
@@ -119,7 +151,7 @@ class Page extends Node
     }
 
     /**
-     * @return \Gravity\CmsBundle\Field\Type\Boolean\BooleanField[]
+     * @return FieldBoolean
      */
     public function getSignedOff()
     {
@@ -127,10 +159,50 @@ class Page extends Node
     }
 
     /**
-     * @param \Gravity\CmsBundle\Field\Type\Boolean\BooleanField[] $signedOff
+     * @param FieldBoolean $signedOff
      */
-    public function setSignedOff($signedOff)
+    public function setSignedOff(FieldBoolean $signedOff)
     {
         $this->signedOff = $signedOff;
+    }
+
+    /**
+     * @return Page
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param Page $parent
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * @return Tag[]
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * @param Tag $tag
+     */
+    public function addTag(Tag $tag)
+    {
+        $this->tags[] = $tag;
+    }
+
+    /**
+     * @param Tag $tag
+     */
+    public function removeTag(Tag $tag)
+    {
+        $this->tags->removeElement($tag);
     }
 }
