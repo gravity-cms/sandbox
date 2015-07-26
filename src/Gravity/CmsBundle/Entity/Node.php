@@ -3,6 +3,7 @@
 
 namespace Gravity\CmsBundle\Entity;
 
+use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -11,13 +12,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @package Gravity\CmsBundle\Entity
  * @author  Andy Thorne <contrabandvr@gmail.com>
  */
-abstract class Node
+abstract class Node extends FieldableEntity
 {
-    /**
-     * @var int
-     */
-    protected $id;
-
     /**
      * @var string
      */
@@ -26,12 +22,12 @@ abstract class Node
     /**
      * @var string
      */
-    protected $customPath;
+    protected $path;
 
     /**
      * @var bool
      */
-    protected $published = false;
+    protected $published = true;
 
     /**
      * @var \DateTime|null
@@ -49,36 +45,6 @@ abstract class Node
     protected $publishedBy;
 
     /**
-     * @var \DateTime
-     */
-    protected $createdOn;
-
-    /**
-     * @var UserInterface
-     */
-    protected $createdBy;
-
-    /**
-     * @var \DateTime|null
-     */
-    protected $editedOn;
-
-    /**
-     * @var UserInterface
-     */
-    protected $editedBy;
-
-    /**
-     * @var \DateTime|null
-     */
-    protected $deletedOn;
-
-    /**
-     * @var UserInterface
-     */
-    protected $deletedBy;
-
-    /**
      * @var Route
      */
     protected $route;
@@ -91,14 +57,6 @@ abstract class Node
     function __toString()
     {
         return $this->title;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -120,17 +78,17 @@ abstract class Node
     /**
      * @return string
      */
-    public function getCustomPath()
+    public function getPath()
     {
-        return $this->customPath;
+        return $this->path;
     }
 
     /**
-     * @param string $customPath
+     * @param string $path
      */
-    public function setCustomPath($customPath)
+    public function setPath($path)
     {
-        $this->customPath = $customPath;
+        $this->path = $path;
     }
 
     /**
@@ -198,99 +156,11 @@ abstract class Node
     }
 
     /**
-     * @return \DateTime
+     * @param Route $route
      */
-    public function getCreatedOn()
+    public function setRoute(Route $route)
     {
-        return $this->createdOn;
-    }
-
-    /**
-     * @param \DateTime $createdOn
-     */
-    public function setCreatedOn($createdOn)
-    {
-        $this->createdOn = $createdOn;
-    }
-
-    /**
-     * @return UserInterface
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * @param UserInterface $createdBy
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    public function getEditedOn()
-    {
-        return $this->editedOn;
-    }
-
-    /**
-     * @param \DateTime|null $editedOn
-     */
-    public function setEditedOn($editedOn)
-    {
-        $this->editedOn = $editedOn;
-    }
-
-    /**
-     * @return UserInterface
-     */
-    public function getEditedBy()
-    {
-        return $this->editedBy;
-    }
-
-    /**
-     * @param UserInterface $editedBy
-     */
-    public function setEditedBy($editedBy)
-    {
-        $this->editedBy = $editedBy;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    public function getDeletedOn()
-    {
-        return $this->deletedOn;
-    }
-
-    /**
-     * @param \DateTime|null $deletedOn
-     */
-    public function setDeletedOn($deletedOn)
-    {
-        $this->deletedOn = $deletedOn;
-    }
-
-    /**
-     * @return UserInterface
-     */
-    public function getDeletedBy()
-    {
-        return $this->deletedBy;
-    }
-
-    /**
-     * @param UserInterface $deletedBy
-     */
-    public function setDeletedBy($deletedBy)
-    {
-        $this->deletedBy = $deletedBy;
+        $this->route = $route;
     }
 
     /**
@@ -299,13 +169,5 @@ abstract class Node
     public function getRoute()
     {
         return $this->route;
-    }
-
-    /**
-     * @param Route $route
-     */
-    public function setRoute(Route $route)
-    {
-        $this->route = $route;
     }
 }

@@ -24,7 +24,17 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('user_entity')->isRequired()->end()
                 ->arrayNode('node_types')
-                    ->prototype('scalar')->end()
+                    ->prototype('array')
+                        ->children()
+                            ->scalarNode('class')->isRequired()->end()
+                            ->arrayNode('admin')
+                                ->children()
+                                    ->scalarNode('class')->isRequired()->end()
+                                    ->scalarNode('category')->end()
+                                    ->scalarNode('label')->end()
+                                ->end()
+                            ->end()
+                        ->end()
                 ->end()
             ->end();
 

@@ -1,0 +1,20 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+
+    <mapped-superclass name="Gravity\CmsBundle\Entity\FieldableEntity">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <!-- publishedBy -->
+        <field name="createdOn" type="datetime" column="created_on" nullable="false"/>
+        <!-- createdBy -->
+        <field name="editedOn" type="datetime" column="edited_on" nullable="true"/>
+        <!-- createdBy -->
+        <field name="deletedOn" type="datetime" column="deleted_on" nullable="true"/>
+        <!-- deletedBy -->
+    </mapped-superclass>
+
+</doctrine-mapping>

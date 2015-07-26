@@ -31,8 +31,8 @@ class FieldCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $fieldManagerDefinition = $container->findDefinition('gravity_cms.field_manager');
-        $dashboardGroups        = $container->getParameter('sonata.admin.configuration.dashboard_groups');
+        $fieldManagerDefinition     = $container->findDefinition('gravity_cms.field_manager');
+        $dashboardGroups            = $container->getParameter('sonata.admin.configuration.dashboard_groups');
         $nodeRouteManagerDefinition = $container->findDefinition('gravity_cms.routing.node_route_manager');
 
         // build a set of instances of the field definitions so we can pre-process resolve all the field's options
@@ -80,12 +80,16 @@ class FieldCompilerPass implements CompilerPassInterface
 
         $fieldMappings = [];
 
-        foreach ($nodeTypes as $nodeClass) {
+        foreach ($nodeTypes as $nodeConfig) {
+
+            $nodeClass     = $nodeConfig['class'];
             $nodeClassRefl = new \ReflectionClass($nodeClass);
+
+            $fieldMappings[$nodeClass] = [];
 
             // generate a sonata admin service for the node
             $adminServiceName       = 'gravity_cms.admin.' . strtolower($nodeClassRefl->getShortName());
-            $adminServiceDefinition = $container->register($adminServiceName, 'Gravity\CmsBundle\Admin\NodeAdmin');
+            $adminServiceDefinition = $container->register($adminServiceName, $nodeConfig['admin']['class']);
             $adminServiceDefinition->setArguments(
                 [
                     null,
@@ -93,14 +97,16 @@ class FieldCompilerPass implements CompilerPassInterface
                     null,
                 ]
             );
+
             $adminServiceDefinition->addTag(
                 'sonata.admin',
                 [
                     'manager_type' => 'orm',
-                    'group'        => 'Content',
-                    'label'        => $nodeClassRefl->getShortName()
+                    'group'        => $nodeConfig['admin']['category'] ?: 'Content',
+                    'label'        => $nodeConfig['admin']['label'] ?: $nodeClassRefl->getShortName(),
                 ]
             );
+
             $adminServiceDefinition->addMethodCall('setFieldManager', [new Reference('gravity_cms.field_manager')]);
             $adminServiceDefinition->addMethodCall('setTokenStorage', [new Reference('security.token_storage')]);
 
@@ -115,14 +121,14 @@ class FieldCompilerPass implements CompilerPassInterface
 
             $config = Yaml::parse(file_get_contents($mappingFile));
 
-            $nodeConfig = $processor->processConfiguration(
+            $nodeFieldConfig = $processor->processConfiguration(
                 $configuration,
                 [
                     $config,
                 ]
             );
 
-            foreach ($nodeConfig['fields'] as $name => $options) {
+            foreach ($nodeFieldConfig['fields'] as $name => $options) {
                 $options['options'] = $this->resolveFieldOptions(
                     $fieldDefinitions[$options['type']],
                     $options['options']
@@ -136,10 +142,13 @@ class FieldCompilerPass implements CompilerPassInterface
             }
 
             // add in the routing mappings
-            $nodeRouteManagerDefinition->addMethodCall('addNodeMapping', [
-                $nodeClass,
-                $nodeConfig['routing']
-            ]);
+            $nodeRouteManagerDefinition->addMethodCall(
+                'addNodeMapping',
+                [
+                    $nodeClass,
+                    $nodeFieldConfig['routing']
+                ]
+            );
 
             // create a dashboard group
             $dashboardGroups['gravity_cms.admin.group.content']['items'][] = $adminServiceName;
@@ -160,9 +169,10 @@ class FieldCompilerPass implements CompilerPassInterface
         $resolver = new OptionsResolver();
         $resolver->setDefaults(
             [
-                'limit'    => -1,
-                'required' => false,
-                'label'    => null,
+                'searchable' => true,
+                'limit'      => -1,
+                'required'   => false,
+                'label'      => null,
             ]
         );
         $fieldDefinition->setOptions($resolver, $options);

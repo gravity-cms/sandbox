@@ -5,6 +5,7 @@ namespace Gravity\CmsBundle\Field;
 
 use Gravity\CmsBundle\Asset\AssetLibraryInterface;
 use Sonata\AdminBundle\Form\FormMapper;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -15,43 +16,94 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 abstract class AbstractFieldWidgetDefinition implements FieldWidgetDefinitionInterface
 {
+
+    /**
+     * Get the form type for the widget
+     *
+     * @return AbstractType|string
+     */
+    abstract public function getForm();
+
+    /**
+     * Set the field options to be passed to the form
+     *
+     * @param FieldDefinitionInterface $fieldDefinition
+     * @param string                   $field
+     * @param array                    $fieldOptions
+     * @param string                   $widget
+     * @param array                    $widgetOptions
+     *
+     * @return array
+     * @internal param array $widgetOptions
+     */
+    protected function getFormOptions(
+        FieldDefinitionInterface $fieldDefinition,
+        $field,
+        array $fieldOptions,
+        $widget,
+        array $widgetOptions
+    ) {
+        return [
+            'field'          => $fieldDefinition,
+            'field_options'  => $fieldOptions,
+            'widget_options' => $widgetOptions,
+            'data_class'     => $fieldDefinition->getEntityClass(),
+        ];
+    }
+
     /**
      * @param FormMapper               $formMapper
      * @param FieldDefinitionInterface $fieldDefinition
      * @param string                   $field
-     * @param array                    $options
+     * @param array                    $fieldOptions
+     * @param array                    $widget
      * @param array                    $widgetOptions
      *
-     * @return void
      */
     public function configureForm(
         FormMapper $formMapper,
         FieldDefinitionInterface $fieldDefinition,
         $field,
-        array $options = [],
-        array $widgetOptions = []
+        array $fieldOptions,
+        $widget,
+        array $widgetOptions
     ) {
-        $isMultiple = $options['limit'] > 1 || $options['limit'] < 0;
+        $isMultiple = $fieldOptions['limit'] > 1 || $fieldOptions['limit'] < 0;
 
-        $formMapper->add(
-            $field,
-            'field_collection',
-            [
-                'type'          => $this->getForm(),
-                'options'       => [
-                    'label'          => false,
-                    'field'          => $fieldDefinition,
-                    'field_options'  => $options,
-                    'widget_options' => $widgetOptions,
-                    'data_class'     => $fieldDefinition->getEntityClass(),
-                ],
-                'field'         => $fieldDefinition,
-                'field_options' => $options,
-                'allow_add'     => $isMultiple,
-                'allow_delete'  => $isMultiple,
-                'by_reference'  => false,
-            ]
-        );
+        if ($isMultiple) {
+            $formMapper->add(
+                $field,
+                'field_collection',
+                [
+                    'type'          => $this->getForm(),
+                    'options'       => [
+                                           'label'    => false,
+                                           'required' => $fieldOptions['required'],
+                                       ] + $this->getFormOptions(
+                            $fieldDefinition,
+                            $field,
+                            $fieldOptions,
+                            $widget,
+                            $widgetOptions
+                        ),
+                    'field'         => $fieldDefinition,
+                    'field_options' => $fieldOptions,
+                    'widget'        => $widget,
+                    'allow_add'     => $isMultiple,
+                    'allow_delete'  => $isMultiple,
+                    'by_reference'  => false,
+                ]
+            );
+        } else {
+            $formMapper->add(
+                $field,
+                $this->getForm(),
+                [
+                    'label'    => null,
+                    'required' => $fieldOptions['required'],
+                ] + $this->getFormOptions($fieldDefinition, $field, $fieldOptions, $widget, $widgetOptions)
+            );
+        }
     }
 
     /**

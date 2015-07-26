@@ -9,10 +9,11 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\UnitOfWork;
 use Gedmo\SoftDeleteable\SoftDeleteableListener;
+use Gravity\CmsBundle\Entity\FieldableEntity;
 use Gravity\CmsBundle\Entity\Node;
-use Gravity\CmsBundle\Entity\Route;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Routing\Route as SymfonyRoute;
+use Gravity\CmsBundle\Routing\RouteBuilder;
+use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Class NodeEventListener
@@ -23,13 +24,23 @@ use Symfony\Component\Routing\Route as SymfonyRoute;
 class NodeEventListener implements EventSubscriber
 {
     /**
-     * @var ContainerInterface
+     * @var RouteBuilder
      */
-    protected $container;
+    protected $routeBuilder;
 
-    function __construct(ContainerInterface $container)
+    /**
+     * @var TokenStorageInterface
+     */
+    protected $tokenStorage;
+
+    /**
+     * @param TokenStorageInterface $tokenStorage
+     * @param RouteBuilder          $routeBuilder
+     */
+    function __construct(TokenStorageInterface $tokenStorage, RouteBuilder $routeBuilder)
     {
-        $this->container = $container;
+        $this->routeBuilder = $routeBuilder;
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
@@ -54,11 +65,11 @@ class NodeEventListener implements EventSubscriber
 
         // update edit dates
         foreach ($uow->getScheduledEntityUpdates() as $entity) {
-            if ($entity instanceof Node) {
-                $user = $this->container->get('security.token_storage')->getToken()->getUser();
+            if ($entity instanceof FieldableEntity) {
+                $user = $this->tokenStorage->getToken()->getUser();
                 $entity->setEditedBy($user);
                 $entity->setEditedOn(new \DateTime());
-                $uow->recomputeSingleEntityChangeSet($em->getClassMetadata(get_class($entity)), $entity);
+                $this->recomputeSingleEntityChangeSet($em, $entity);
             }
         }
     }
@@ -73,9 +84,9 @@ class NodeEventListener implements EventSubscriber
     {
         $entity = $args->getEntity();
 
-        if ($entity instanceof Node) {
+        if ($entity instanceof FieldableEntity) {
             if (!$entity->getCreatedBy()) {
-                $user = $this->container->get('security.context')->getToken()->getUser();
+                $user = $this->tokenStorage->getToken()->getUser();
                 $entity->setCreatedBy($user);
             }
 
@@ -94,15 +105,14 @@ class NodeEventListener implements EventSubscriber
             $route = $entity->getRoute();
 
             if (!$route instanceof Route) {
-                $oldRoute     = $this->createNewNodeRoute($entity);                     // make a new route
-                $deletedRoute = $this->createNewNodeDeletedRoute($oldRoute->getPath()); // 410 the new route
-                $route        = $this->createNewNodeRouteEntity($deletedRoute);         // create an entity of the route
+                $route = $this->getNodeRoute($entity);  // make a new route
+                $this->deletedRoute($route);            // 410 the new route
+
                 $entity->setRoute($route);
                 $em->persist($route);
                 $em->flush($route);
             } else {
-                $symfonyRoute = $this->createNewNodeDeletedRoute($route->getPath());
-                $route->setRoute($symfonyRoute);
+                $this->deletedRoute($route);
                 $em->persist($route);
                 $em->flush($route);
             }
@@ -120,13 +130,11 @@ class NodeEventListener implements EventSubscriber
                 $route = $entity->getRoute();
 
                 if (!$route instanceof Route) {
-                    $oldRoute     = $this->createNewNodeRoute($entity);                     // make a new route
-                    $deletedRoute = $this->createNewNodeDeletedRoute($oldRoute->getPath()); // 410 the new route
-                    $route        =
-                        $this->createNewNodeRouteEntity($deletedRoute);         // create an entity of the route
+                    $route = $this->getNodeRoute($entity);  // make a new route
+                    $this->deletedRoute($route);            // 410 the new route
+
                     $entity->setRoute($route);
-                    $em->persist($route);
-                    $uow->computeChangeSet($em->getClassMetadata(get_class($route)), $route);
+                    $this->computeChangeSet($em, $route);
 
                     $uow->propertyChanged($entity, 'route', null, $route);
                     $uow->scheduleExtraUpdate(
@@ -136,14 +144,11 @@ class NodeEventListener implements EventSubscriber
                         ]
                     );
                 } else {
-                    $symfonyRoute = $this->createNewNodeDeletedRoute($route->getPath());
-                    $route->setRoute($symfonyRoute);
-                    $em->persist($route);
-                    $uow->recomputeSingleEntityChangeSet($em->getClassMetadata(get_class($route)), $route);
+                    $this->deletedRoute($route);
+                    $this->recomputeSingleEntityChangeSet($em, $route);
                 }
 
-                $em->persist($entity);
-                $uow->recomputeSingleEntityChangeSet($em->getClassMetadata(get_class($entity)), $entity);
+                $this->recomputeSingleEntityChangeSet($em, $entity);
             }
         }
 
@@ -162,77 +167,62 @@ class NodeEventListener implements EventSubscriber
             if ($entity instanceof Node) {
                 $changeSet = $uow->getEntityChangeSet($entity);
 
-                $currentRoute = $entity->getRoute();
+                $oldRoute = $entity->getRoute();
 
                 // Check if we have a route. If not, create on and continue
-                if (!$currentRoute instanceof Route) {
+                if (!$oldRoute instanceof Route) {
                     // create the new route
-                    $symfonyRoute = $this->createNewNodeRoute($entity);
-                    $currentRoute = $this->createNewNodeRouteEntity($symfonyRoute);
-                    $entity->setRoute($currentRoute);
-                    $em->persist($currentRoute);
-                    $uow->computeChangeSet($em->getClassMetadata(get_class($currentRoute)), $currentRoute);
-                    $uow->recomputeSingleEntityChangeSet($em->getClassMetadata(get_class($entity)), $entity);
+                    $oldRoute = $this->getNodeRoute($entity);
+
+                    $entity->setRoute($oldRoute);
+                    $this->computeChangeSet($em, $oldRoute);
+                    $this->recomputeSingleEntityChangeSet($em, $entity);
                 }
 
-                $oldRoute = $currentRoute->getRoute();
-
                 // Check if the route has been manually updated
-                $newRoute = $this->createNewNodeRoute($entity);
+                $newRoute = $this->getNodeRoute($entity);
 
                 // if the route changed, update it
                 if ($newRoute->getPath() !== $oldRoute->getPath()) {
                     // create the new route entity
-                    $newRouteEntity = $this->createNewNodeRouteEntity($newRoute);
-                    $entity->setRoute($newRouteEntity);
-                    $em->persist($newRouteEntity);
-                    $uow->computeChangeSet($em->getClassMetadata(get_class($newRouteEntity)), $newRouteEntity);
+                    $entity->setRoute($newRoute);
+                    $this->computeChangeSet($em, $newRoute);
 
-                    // set any old route to redirtect to the new route
-                    $newSymfonyRoute = $this->createNewNodeRedirectRoute($oldRoute->getPath(), $newRoute->getPath());
-                    $currentRoute->setRoute($newSymfonyRoute);
-                    $em->persist($currentRoute);
-                    $uow->recomputeSingleEntityChangeSet(
-                        $em->getClassMetadata(get_class($currentRoute)),
-                        $currentRoute
-                    );
+                    // set any old route to redirect to the new route
+                    $this->redirectRoute($oldRoute, $newRoute->getPath());
+                    $this->recomputeSingleEntityChangeSet($em, $oldRoute);
                 }
 
                 if (isset($changeSet['deletedOn'])) {
                     if ($changeSet['deletedOn'] instanceof \DateTime) {
                         // delete
-                        $newRoute = $this->createNewNodeDeletedRoute($entity->getPath());
-                        $currentRoute->getRoute($newRoute);
-                        $uow->recomputeSingleEntityChangeSet(
-                            $em->getClassMetadata(get_class($currentRoute)),
-                            $currentRoute
-                        );
+                        $this->deletedRoute($oldRoute);
+                        $this->recomputeSingleEntityChangeSet($em, $oldRoute);
                     } else {
                         // un-delete
-                        $newRoute = $this->createNewNodeRoute($entity);
-                        $currentRoute->getRoute($newRoute);
-                        $uow->recomputeSingleEntityChangeSet(
-                            $em->getClassMetadata(get_class($currentRoute)),
-                            $currentRoute
-                        );
+                        $newRoute = $this->getNodeRoute($entity);
+                        $entity->setRoute($newRoute);
+                        $uow->scheduleForDelete($oldRoute);
+
+                        $this->computeChangeSet($em, $newRoute);
+                        $this->recomputeSingleEntityChangeSet($em, $oldRoute);
                     }
                 }
 
                 $em->persist($entity);
-                $uow->recomputeSingleEntityChangeSet($em->getClassMetadata(get_class($entity)), $entity);
+                $this->recomputeSingleEntityChangeSet($em, $entity);
             }
         }
 
         // create 200 routes for new nodes
         foreach ($uow->getScheduledEntityInsertions() as $entity) {
             if ($entity instanceof Node) {
-                $symfonyRoute = $this->createNewNodeRoute($entity);
-                $route        = $this->createNewNodeRouteEntity($symfonyRoute);
+                $route = $this->getNodeRoute($entity);
                 $em->persist($route);
-                $uow->computeChangeSet($em->getClassMetadata(get_class($route)), $route);
+                $this->computeChangeSet($em, $route);
 
                 $entity->setRoute($route);
-                $uow->recomputeSingleEntityChangeSet($em->getClassMetadata(get_class($entity)), $entity);
+                $this->recomputeSingleEntityChangeSet($em, $entity);
             }
         }
     }
@@ -242,75 +232,65 @@ class NodeEventListener implements EventSubscriber
      *
      * @param Node $node
      *
-     * @return SymfonyRoute
+     * @return Route
      */
-    protected function createNewNodeRoute(Node $node)
+    protected function getNodeRoute(Node $node)
     {
-        $routeBuilder = $this->container->get('gravity_cms.routing.node_route_builder');
-
-        $route = $routeBuilder->build($node);
-
-        return new SymfonyRoute(
-            $route,
-            [
-                '_controller' => '\Gravity\NodeBundle\Controller\NodeController::viewAction',
-                'node'        => $node->getId(),
-            ]
-        );
+        return $this->routeBuilder->build($node);
     }
 
     /**
-     * Create a redirect route
+     * Redirect a route to a new url
      *
-     * @param $oldPath
-     * @param $newPath
+     * @param Route  $route
+     * @param string $newPath
      *
-     * @return SymfonyRoute
+     * @return \Symfony\Component\Routing\Route
      */
-    protected function createNewNodeRedirectRoute($oldPath, $newPath)
+    protected function redirectRoute(Route $route, $newPath)
     {
-        $newSymfonyRoute = new SymfonyRoute($oldPath);
-        $newSymfonyRoute->setDefaults(
+        return $route->setDefaults(
             [
                 '_controller' => 'FrameworkBundle:Redirect:urlRedirect',
                 'path'        => $newPath,
                 'permanent'   => true,
             ]
         );
-
-        return $newSymfonyRoute;
     }
 
     /**
      * Create a 410 route
      *
-     * @param $path
-     *
-     * @return SymfonyRoute
-     */
-    protected function createNewNodeDeletedRoute($path)
-    {
-        return $this->createNewNodeRedirectRoute($path, '');
-    }
-
-    /**
-     * Create a new Route entity for the given route
-     *
-     * @param SymfonyRoute $route
+     * @param Route $route
      *
      * @return Route
      */
-    protected function createNewNodeRouteEntity(SymfonyRoute $route)
+    protected function deletedRoute(Route $route)
     {
-        $newPathName = str_replace(['/', '-'], '_', ltrim($route->getPath(), '/'));
-
-        $newRoute = new Route();
-        $newRoute->setName('gravity_node_' . $newPathName);
-        $newRoute->setPattern($route->getPath());
-        $newRoute->setPath($route->getPath());
-        $newRoute->setRoute($route);
-
-        return $newRoute;
+        return $this->redirectRoute($route, '');
     }
 
+    /**
+     * Compute the changeset of a new entity
+     *
+     * @param EntityManager $em
+     * @param object        $entity
+     */
+    protected function computeChangeSet(EntityManager $em, $entity)
+    {
+        $em->persist($entity);
+        $em->getUnitOfWork()->computeChangeSet($em->getClassMetadata(get_class($entity)), $entity);
+    }
+
+    /**
+     * Compute the change set for an existing single entity
+     *
+     * @param EntityManager $em
+     * @param object        $entity
+     */
+    protected function recomputeSingleEntityChangeSet(EntityManager $em, $entity)
+    {
+        $em->persist($entity);
+        $em->getUnitOfWork()->recomputeSingleEntityChangeSet($em->getClassMetadata(get_class($entity)), $entity);
+    }
 } 

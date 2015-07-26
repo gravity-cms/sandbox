@@ -1,3 +1,4 @@
-gravity_cms_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: GravityCmsBundle:Default:index }
+gravity_cms_autocomplete:
+  path: /api/forms/autocomplete/{type}
+  defaults: { _controller: GravityCmsBundle:Api/AutoComplete:autoComplete }
+

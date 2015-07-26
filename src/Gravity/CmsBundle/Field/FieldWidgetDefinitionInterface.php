@@ -5,7 +5,6 @@ namespace Gravity\CmsBundle\Field;
 
 use Gravity\CmsBundle\Asset\AssetLibraryInterface;
 use Sonata\AdminBundle\Form\FormMapper;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -39,26 +38,22 @@ interface FieldWidgetDefinitionInterface
     public function getDescription();
 
     /**
-     * Get the form type for the widget
-     *
-     * @return AbstractType|string
-     */
-    public function getForm();
-
-    /**
      * @param FormMapper               $formMapper
      * @param FieldDefinitionInterface $fieldDefinition
      * @param string                   $field
-     * @param array                    $options
+     * @param array                    $fieldOptions
+     * @param string                   $widget
      * @param array                    $widgetOptions
      *
+     * @return
      */
     public function configureForm(
         FormMapper $formMapper,
         FieldDefinitionInterface $fieldDefinition,
         $field,
-        array $options = [],
-        array $widgetOptions = []
+        array $fieldOptions,
+        $widget,
+        array $widgetOptions
     );
 
     /**

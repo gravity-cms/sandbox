@@ -134,9 +134,10 @@ class FieldManager
         $resolver = new OptionsResolver();
         $resolver->setDefaults(
             [
-                'limit' => -1,
-                'required' => false,
-                'label' => null,
+                'limit'      => -1,
+                'required'   => false,
+                'label'      => null,
+                'searchable' => true,
             ]
         );
 

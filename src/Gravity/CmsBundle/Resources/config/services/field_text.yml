@@ -4,6 +4,7 @@ services:
     tags:
       - { name: gravity_cms.field }
 
+  # Formatted Widget
   gravity_cms.field.text.widget.formatted:
     class: Gravity\CmsBundle\Field\Type\Text\Widget\Formatted\FormattedWidget
     tags:
@@ -13,3 +14,9 @@ services:
     class: Gravity\CmsBundle\Field\Type\Text\Widget\Formatted\FormattedWidgetForm
     tags:
       - { name: form.type, alias: gravity_field_text_widget }
+
+  # Unformatted Widget
+  gravity_cms.field.text.widget.unformatted:
+    class: Gravity\CmsBundle\Field\Type\Text\Widget\UnFormatted\UnFormattedWidget
+    tags:
+      - { name: gravity_cms.field.widget }

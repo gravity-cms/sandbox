@@ -1,0 +1,21 @@
+services:
+  gravity_cms.field.reference:
+    class: Gravity\CmsBundle\Field\Type\Reference\ReferenceField
+    tags:
+      - { name: gravity_cms.field }
+
+  # Widgets
+  gravity_cms.field.reference.widget.select:
+    class: Gravity\CmsBundle\Field\Type\Reference\Widget\Select\SelectWidget
+    tags:
+      - { name: gravity_cms.field.widget }
+
+  gravity_cms.field.reference.widget.autocomplete:
+    class: Gravity\CmsBundle\Field\Type\Reference\Widget\AutoComplete\AutoCompleteWidget
+    tags:
+      - { name: gravity_cms.field.widget }
+
+  gravity_cms.field.reference.event_subscriber.field_event_mapping:
+    class: Gravity\CmsBundle\Field\Type\Reference\EventDispatcher\ReferenceFieldEventMappingSubscriber
+    tags:
+      - { name: kernel.event_subscriber }

@@ -4,24 +4,14 @@
                    https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
 
     <mapped-superclass name="Gravity\CmsBundle\Entity\Node">
-        <id name="id" type="integer" column="id">
-            <generator strategy="AUTO"/>
-        </id>
-
         <field name="title" type="string" length="255"/>
-        <field name="customPath" type="string" column="custom_path" length="2048" nullable="true"/>
+        <field name="path" type="string" column="path" length="2048" nullable="true"/>
         <field name="published" type="boolean"/>
         <field name="publishedFrom" type="datetime" column="published_from" nullable="true"/>
         <field name="publishedTo" type="datetime" column="published_to" nullable="true"/>
-        <!-- publishedBy -->
-        <field name="createdOn" type="datetime" column="created_on" nullable="false"/>
-        <!-- createdBy -->
-        <field name="editedOn" type="datetime" column="edited_on" nullable="false"/>
-        <!-- createdBy -->
-        <field name="deletedOn" type="datetime" column="deleted_on" nullable="true"/>
-        <!-- deletedBy -->
 
-        <many-to-one target-entity="Gravity\CmsBundle\Entity\Route" field="route">
+
+        <many-to-one target-entity="Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route" field="route">
         </many-to-one>
     </mapped-superclass>
 

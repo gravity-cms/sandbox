@@ -6,6 +6,7 @@ services:
   gravity_cms.field.doctrine.mapping_subscriber:
     class: Gravity\CmsBundle\Field\Doctrine\FieldMappingSubscriber
     arguments:
+      - @event_dispatcher
       - @gravity_cms.field_manager
       - %gravity_cms.field_mappings%
       - %gravity_cms.user_entity%

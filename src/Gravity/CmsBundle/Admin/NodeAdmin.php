@@ -2,62 +2,15 @@
 
 namespace Gravity\CmsBundle\Admin;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Gravity\CmsBundle\Entity\Node;
-use Gravity\CmsBundle\Field\FieldManager;
-use Sonata\AdminBundle\Admin\Admin;
+use Gravity\CmsBundle\Field\Admin\AbstractFieldableAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
 
-class NodeAdmin extends Admin
+class NodeAdmin extends AbstractFieldableAdmin
 {
-    /**
-     * @var FieldManager
-     */
-    protected $fieldManager;
-
-    /**
-     * @var TokenStorageInterface
-     */
-    protected $tokenStorage;
-
-    /**
-     * @return FieldManager
-     */
-    public function getFieldManager()
-    {
-        return $this->fieldManager;
-    }
-
-    /**
-     * @param FieldManager $fieldManager
-     */
-    public function setFieldManager($fieldManager)
-    {
-        $this->fieldManager = $fieldManager;
-    }
-
-    /**
-     * @return TokenStorageInterface
-     */
-    public function getTokenStorage()
-    {
-        return $this->tokenStorage;
-    }
-
-    /**
-     * @param TokenStorageInterface $tokenStorage
-     */
-    public function setTokenStorage(TokenStorageInterface $tokenStorage)
-    {
-        $this->tokenStorage = $tokenStorage;
-    }
 
     public function getNewInstance()
     {
@@ -66,19 +19,21 @@ class NodeAdmin extends Admin
         $entity        = new $className();
         $fieldMappings = $this->fieldManager->getEntityFieldMapping($this->getClass());
 
-        $optionsResolver = $this->fieldManager->createFieldOptionsResolver();
 
         foreach ($fieldMappings as $field => $fieldMapping) {
             $fieldDefinition = $this->fieldManager->getFieldDefinition($fieldMapping['type']);
 
+            $optionsResolver = $this->fieldManager->createFieldOptionsResolver();
             $fieldDefinition->setOptions($optionsResolver);
             $resolvedOptions = $optionsResolver->resolve($fieldMapping['options']);
 
             if ($fieldMapping['dynamic'] && $resolvedOptions['limit'] == 1) {
                 $fieldClass = $fieldDefinition->getEntityClass();
-                $entity->{"set{$field}"}(
-                    [new $fieldClass()]
-                );
+                if ($fieldClass) {
+                    $entity->{"set{$field}"}(
+                        new $fieldClass()
+                    );
+                }
             }
 
         }
@@ -103,116 +58,16 @@ class NodeAdmin extends Admin
         }
     }
 
-
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
-    {
-        $datagridMapper
-            ->add('title')
-            ->add('published')
-            ->add('publishedFrom')
-            ->add('publishedTo')
-            ->add('createdOn')
-            ->add('editedOn')
-            ->add('deletedOn');
-    }
-
-    /**
-     * @param ListMapper $listMapper
-     */
-    protected function configureListFields(ListMapper $listMapper)
-    {
-        $listMapper
-            ->addIdentifier('title')
-            ->add('published')
-            ->add('publishedFrom')
-            ->add('publishedTo')
-            ->add('createdOn')
-            ->add('editedOn')
-            ->add('deletedOn')
-            ->add(
-                '_action',
-                'actions',
-                [
-                    'actions' => [
-                        'show'   => [],
-                        'edit'   => [],
-                        'delete' => [],
-                    ]
-                ]
-            );
-    }
-
-
     /**
      * @param FormMapper $formMapper
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper
-            ->with('Content', ['class' => 'col-md-9'])->end()
-            ->with('Publishing', ['class' => 'col-md-3'])->end()
-            ->with('Routing', ['class' => 'col-md-3'])->end();
-
         $formMapper->with('Content')
-            ->add('title');
+            ->add('title')
+        ->end();
 
-        $fieldMappings = $this->fieldManager->getEntityFieldMapping($this->getClass());
-
-        foreach ($fieldMappings as $field => $settings) {
-            $fieldDefinition       = $this->fieldManager->getFieldDefinition($settings['type']);
-            $fieldWidgetDefinition = $this->fieldManager->getFieldWidgetDefinition($settings['widget']['type']);
-
-            $constraints = $fieldDefinition->getConstraints($field, $settings['options']);
-
-            if ($settings['dynamic']) {
-                $fieldWidgetDefinition->configureForm(
-                    $formMapper,
-                    $fieldDefinition,
-                    $field,
-                    $settings['options'],
-                    $settings['widget']['options']
-                );
-
-                $formMapper->getFormBuilder()->addEventListener(
-                    FormEvents::PRE_SET_DATA,
-                    function (FormEvent $formEvent) use ($fieldDefinition, $field, $settings) {
-                        $data = $formEvent->getData();
-
-                        if ($data instanceof Node) {
-                            $value = $data->{"get{$field}"}();
-                            if (!$value || !count($value) && $settings['options']['limit'] == 1) {
-                                $fieldClass = $fieldDefinition->getEntityClass();
-                                $data->{"set{$field}"}(
-                                    new ArrayCollection(
-                                        [
-                                            new $fieldClass(),
-                                        ]
-                                    )
-                                );
-                            }
-                        }
-                    }
-                );
-            } else {
-                $fieldWidgetDefinition->configureForm(
-                    $formMapper,
-                    $field,
-                    $settings['options'],
-                    $settings['widget']['options']
-                );
-
-                /** @var ClassMetadata $metadata */
-                $metadata = $this->validator->getMetadataFactory()->getMetadataFor($this->getClass());
-
-                foreach ($constraints as $constraintField => $constraint) {
-                    $metadata->addPropertyConstraints($constraintField, $constraint);
-                }
-            }
-        }
-        $formMapper->end();
+        parent::configureFormFields($formMapper); // TODO: Change the autogenerated stub
 
         $formMapper->with('Publishing')
             ->add(
@@ -238,15 +93,52 @@ class NodeAdmin extends Admin
             )
             ->end();
 
-
         $formMapper->with('Routing')
-            ->add('customPath', 'text', [
+            ->add('path', 'text', [
                 'required' => false,
             ])
-            ->setHelps([
-                'customPath' => 'Set a custom path',
-            ])
-        ->end();
+            ->end();
+    }
+
+
+    /**
+     * @param DatagridMapper $datagridMapper
+     */
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    {
+        $datagridMapper
+            ->add('title')
+            ->add('published')
+            ->add('publishedFrom')
+            ->add('publishedTo')
+            ->add('createdOn')
+            ->add('editedOn')
+            ->add('deletedOn');
+    }
+
+    /**
+     * @param ListMapper $listMapper
+     */
+    protected function configureListFields(ListMapper $listMapper)
+    {
+        $listMapper
+            ->addIdentifier('title')
+            ->add('path')
+            ->add('published')
+            ->add('publishedFrom')
+            ->add('publishedTo')
+            ->add('createdOn')
+            ->add(
+                '_action',
+                'actions',
+                [
+                    'actions' => [
+                        'show'   => [],
+                        'edit'   => [],
+                        'delete' => [],
+                    ]
+                ]
+            );
     }
 
     /**
@@ -263,30 +155,4 @@ class NodeAdmin extends Admin
             ->add('editedOn')
             ->add('deletedOn');
     }
-
-    /**
-     * @param Node $object
-     *
-     * @return void
-     */
-    public function prePersist($object)
-    {
-        $user = $this->tokenStorage->getToken()->getUser();
-        if (!$object->getId()) {
-            $object->setCreatedBy($user);
-            $object->setCreatedOn(new \DateTime());
-        }
-
-        $object->setEditedBy($user);
-        $object->setEditedOn(new \DateTime());
-    }
-
-    public function preUpdate($object)
-    {
-        $user = $this->tokenStorage->getToken()->getUser();
-        $object->setEditedBy($user);
-        $object->setEditedOn(new \DateTime());
-    }
-
-
 }

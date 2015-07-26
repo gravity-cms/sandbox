@@ -1,30 +1,22 @@
 imports:
   - { resource: services/admin.yml }
+  - { resource: services/search.yml }
   - { resource: services/field.yml }
   - { resource: services/field_text.yml }
   - { resource: services/field_number.yml }
   - { resource: services/field_choice.yml }
   - { resource: services/field_boolean.yml }
+  - { resource: services/field_reference.yml }
 
 services:
-
-#    gravity_cms.admin.node:
-#        class: Gravity\CmsBundle\Admin\NodeAdmin
-#        arguments: [~, Gravity\CmsBundle\Entity\Node, SonataAdminBundle:CRUD]
-#        tags:
-#            - {name: sonata.admin, manager_type: orm, group: admin, label: Node}
-
-  gravity_cms.routing.cms_route_provider:
-    class: Gravity\CmsBundle\Routing\Provider\CmsRouteProvider
-    arguments:
-      - @doctrine.orm.default_entity_manager
 
   #
   # Doctrine - Map node listener
   gravity_node.doctrine.node_listener:
     class: Gravity\CmsBundle\Doctrine\EventListener\NodeEventListener
     arguments:
-      - @service_container
+      - @security.token_storage
+      - @gravity_cms.routing.node_route_builder
     tags:
       - { name: doctrine.event_subscriber }
 
@@ -49,3 +41,22 @@ services:
     class: Gravity\CmsBundle\Form\Type\BasicRouteType
     tags:
       - { name: form.type, alias: basic_route }
+
+  gravity_cms.form.type.autocomplete:
+    class: Gravity\CmsBundle\Form\Type\AutoCompleteType
+    arguments:
+      - @gravity_cms.search.handler_manager
+      - @router.default
+    tags:
+      - { name: form.type, alias: auto_complete }
+
+  #
+  # Node validators
+  validator.routable:
+    class: Gravity\CmsBundle\Field\Validator\RoutableValidator
+    arguments:
+      - @doctrine.orm.default_entity_manager
+      - @gravity_cms.routing.node_route_manager
+      - @gravity_cms.routing.node_route_builder
+    tags:
+      - { name: validator.constraint_validator, alias: routable }

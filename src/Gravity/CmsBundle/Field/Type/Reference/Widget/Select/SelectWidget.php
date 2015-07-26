@@ -1,11 +1,11 @@
 <?php
 
-namespace Gravity\CmsBundle\Field\Type\Choice\Widget\Select;
+namespace Gravity\CmsBundle\Field\Type\Reference\Widget\Select;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Gravity\CmsBundle\Entity\FieldChoice;
 use Gravity\CmsBundle\Field\AbstractFieldWidgetDefinition;
 use Gravity\CmsBundle\Field\FieldDefinitionInterface;
+use Gravity\CmsBundle\Field\Type\Reference\ReferenceField;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,7 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Class SelectWidget
  *
- * @package Gravity\CmsBundle\Field\Type\Choice\Widget\Select
+ * @package Gravity\CmsBundle\Field\Type\Reference\Widget\Select
  * @author  Andy Thorne <contrabandvr@gmail.com>
  */
 class SelectWidget extends AbstractFieldWidgetDefinition
@@ -23,7 +23,7 @@ class SelectWidget extends AbstractFieldWidgetDefinition
      */
     public function getName()
     {
-        return 'choice.select';
+        return 'select';
     }
 
     /**
@@ -39,7 +39,7 @@ class SelectWidget extends AbstractFieldWidgetDefinition
      */
     public function getDescription()
     {
-        return 'Choice Using a Dropdown Box';
+        return 'Entity Using a Dropdown Box';
     }
 
     /**
@@ -53,34 +53,29 @@ class SelectWidget extends AbstractFieldWidgetDefinition
     }
 
     /**
-     * @param FormMapper               $formMapper
+     * Set the field options to be passed to the form
+     *
      * @param FieldDefinitionInterface $fieldDefinition
      * @param string                   $field
      * @param array                    $fieldOptions
-     * @param array                    $widget
+     * @param string                   $widget
      * @param array                    $widgetOptions
+     *
+     * @return array
      */
-    public function configureForm(
-        FormMapper $formMapper,
+    protected function getFormOptions(
         FieldDefinitionInterface $fieldDefinition,
         $field,
         array $fieldOptions,
         $widget,
         array $widgetOptions
     ) {
-        $isMultiple = $fieldOptions['limit'] > 1 || $fieldOptions['limit'] < 0;
-
-        $formMapper->add(
-            $field,
-            'choice',
-            [
-                'multiple' => true,
-                'expanded' => false,
-                'choices'  => $fieldOptions['choices'],
-            ]
-        );
+        return [
+            'class'    => $fieldOptions['entity'],
+            'multiple' => false,
+            'expanded' => $widgetOptions['expanded'],
+        ];
     }
-
 
     /**
      * Checks if this widget supports the given field
@@ -91,7 +86,7 @@ class SelectWidget extends AbstractFieldWidgetDefinition
      */
     public function supportsField(FieldDefinitionInterface $field)
     {
-        return ($field->getName() === 'choice');
+        return ($field instanceof ReferenceField);
     }
 
     /**

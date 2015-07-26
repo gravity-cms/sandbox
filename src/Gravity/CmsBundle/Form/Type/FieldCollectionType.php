@@ -34,6 +34,7 @@ class FieldCollectionType extends AbstractType
             [
                 'field',
                 'field_options',
+                'widget',
             ]
         );
 
@@ -41,6 +42,7 @@ class FieldCollectionType extends AbstractType
             [
                 'field'         => 'Gravity\CmsBundle\Field\FieldDefinitionInterface',
                 'field_options' => 'array',
+                'widget'        => 'string',
             ]
         );
     }
@@ -51,6 +53,7 @@ class FieldCollectionType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['field']    = $options['field'];
+        $view->vars['widget']   = $options['widget'];
         $view->vars['limit']    = $options['field_options']['limit'];
         $view->vars['required'] = $options['field_options']['required'];
     }

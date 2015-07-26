@@ -28,8 +28,14 @@ class NodeConfiguration implements ConfigurationInterface
             ->children()
                 ->arrayNode('routing')
                     ->children()
-                        ->scalarNode('route')->end()
+                        ->scalarNode('path')->end()
                         ->scalarNode('extendable')->end()
+                    ->end()
+                ->end()
+
+                ->arrayNode('search')
+                    ->children()
+                        ->scalarNode('handler')->end()
                     ->end()
                 ->end()
 

@@ -42,7 +42,7 @@ class NodeRouteManager
 
     public function getRoute($name)
     {
-        $route = $this->router->getRouteCollection()->all()[$name];
+        $route = $this->router->match($name);
 
         $compiler = new RouteCompiler();
 
