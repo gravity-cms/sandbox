@@ -22,9 +22,26 @@ sonata_block:
         # Your other blocks
 
 gravity_cms:
-  user_entity: AndyThorne\SandboxBundle\Entity\User
-  node_types:
-    page: AndyThorne\SandboxBundle\Entity\Page
+      user_entity: AndyThorne\SandboxBundle\Entity\User
+      node_types:
+          page:
+              class: AndyThorne\SandboxBundle\Entity\Page
+              admin:
+                class: Gravity\CmsBundle\Admin\NodeAdmin
+                category: Content
+                label: Page
+          tag:
+              class: AndyThorne\SandboxBundle\Entity\Tag
+              admin:
+                class: Gravity\TagBundle\Admin\TagAdmin
+                category: Taxonomy
+                label: Tag
+          category:
+              class: AndyThorne\SandboxBundle\Entity\Category
+              admin:
+                class: Gravity\TagBundle\Admin\TagAdmin
+                category: Taxonomy
+                label: Categoty
 
 ivory_ck_editor:
     default_config: default

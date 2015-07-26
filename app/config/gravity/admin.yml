@@ -22,8 +22,11 @@ cmf_routing:
       cmf_routing.dynamic_router: 300
       router.default: 200
   dynamic:
-    enabled: true
-    route_provider_service_id: gravity_cms.routing.cms_route_provider
+#    enabled: true
+#    route_provider_service_id: gravity_cms.routing.cms_route_provider
+    route_collection_limit: false
+    persistence:
+      orm: ~
 
 assetic:
     bundles:

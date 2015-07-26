@@ -5,8 +5,10 @@ imports:
 
     - { resource: sonata/formatter.yml }
     - { resource: sonata/user.yml }
+    - { resource: sonata/media.yml }
     - { resource: gravity/admin.yml }
     - { resource: gravity/cms.yml }
+    - { resource: gravity/tag.yml }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration

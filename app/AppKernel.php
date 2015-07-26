@@ -34,6 +34,7 @@ class AppKernel extends Kernel
             new Knp\Bundle\MarkdownBundle\KnpMarkdownBundle(),
             new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
             new Sonata\FormatterBundle\SonataFormatterBundle(),
+            new Sonata\IntlBundle\SonataIntlBundle(),
 
             // Then add SonataAdminBundle
             new Sonata\AdminBundle\SonataAdminBundle(),
@@ -42,7 +43,12 @@ class AppKernel extends Kernel
             new Gravity\AdminBundle\GravityAdminBundle('SonataAdminBundle'),
             new Hearsay\RequireJSBundle\HearsayRequireJSBundle(),
 
-            new \Symfony\Cmf\Bundle\RoutingBundle\CmfRoutingBundle(),
+            new Symfony\Cmf\Bundle\RoutingBundle\CmfRoutingBundle(),
+            new Gravity\TagBundle\GravityTagBundle(),
+            new Gravity\MediaBundle\GravityMediaBundle(),
+
+            new JMS\SerializerBundle\JMSSerializerBundle(),
+            new Sonata\MediaBundle\SonataMediaBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
