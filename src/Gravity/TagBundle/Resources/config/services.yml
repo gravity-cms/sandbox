@@ -1,0 +1,6 @@
+services:
+#    gravity_tag.admin.tag:
+#        class: Gravity\TagBundle\Admin\TagAdmin
+#        arguments: [~, ~, SonataAdminBundle:CRUD]
+#        tags:
+#            - {name: sonata.admin, manager_type: orm, group: Taxonomy } # , label: Tag
