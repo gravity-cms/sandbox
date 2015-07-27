@@ -96,9 +96,9 @@ $fa-font-path: "/fonts";
 @import "theme/themes/default/default";
 
 @import "custom";
-@import "widgets/_admin_box";
-@import "widgets/_menu_widget";
-@import "widgets/_notifications";
+@import "widgets/admin_box";
+@import "widgets/menu_widget";
+@import "widgets/notifications";
 
 // add widgets here
 // @import "./theme/widgets/...";

@@ -34,6 +34,7 @@ class FieldCompilerPass implements CompilerPassInterface
         $fieldManagerDefinition     = $container->findDefinition('gravity_cms.field_manager');
         $dashboardGroups            = $container->getParameter('sonata.admin.configuration.dashboard_groups');
         $nodeRouteManagerDefinition = $container->findDefinition('gravity_cms.routing.node_route_manager');
+        $assetManagerDefinition     = $container->findDefinition('assetic.asset_manager');
 
         // build a set of instances of the field definitions so we can pre-process resolve all the field's options
         $fieldDefinitions       = [];
@@ -58,6 +59,7 @@ class FieldCompilerPass implements CompilerPassInterface
 
         // field widget definitions
         $fieldWidgetTags = $container->findTaggedServiceIds('gravity_cms.field.widget');
+        $stylesheets = [];
         foreach ($fieldWidgetTags as $sid => $tags) {
             $fieldManagerDefinition->addMethodCall(
                 'addFieldWidgetDefinition',
@@ -71,7 +73,26 @@ class FieldCompilerPass implements CompilerPassInterface
             /** @var FieldWidgetDefinitionInterface $fieldWidgetDefinition */
             $fieldWidgetDefinition                                     = new $fieldWidgetDefinitionClass();
             $fieldWidgetDefinitions[$fieldWidgetDefinition->getName()] = $fieldWidgetDefinition;
+
+            // TODO: add all widgets into a assetic formula
+            foreach($fieldWidgetDefinition->getAssetLibraries() as $library) {
+                $stylesheets = array_merge($stylesheets, $library->getStylesheets());
+            }
         }
+
+        $assetManagerDefinition->addMethodCall(
+            'setFormula',
+            [
+                'gravity_cms_fields',
+                [
+                    $stylesheets,
+                    ['compass'],
+                    [
+                        'output' => '/css/fields.css'
+                    ],
+                ]
+            ]
+        );
 
         $nodeTypes = $container->getParameter('gravity_cms.node_types');
 
