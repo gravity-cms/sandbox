@@ -15,7 +15,7 @@ class AutoCompleteWidgetAssetLibrary extends AbstractAssetLibrary
     public function getJavascripts()
     {
         return [
-            'bundles/gravitycms/js/field/autocomplete.js'
+            '/bundles/gravitycms/js/field/autocomplete.js'
         ];
     }
 }

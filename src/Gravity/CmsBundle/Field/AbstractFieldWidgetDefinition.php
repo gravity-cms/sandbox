@@ -109,11 +109,9 @@ abstract class AbstractFieldWidgetDefinition implements FieldWidgetDefinitionInt
     /**
      * Get a list of asset libraries to use
      *
-     * @param array $options
-     *
      * @return AssetLibraryInterface[]
      */
-    public function getAssetLibraries(array $options)
+    public function getAssetLibraries()
     {
         return [];
     }

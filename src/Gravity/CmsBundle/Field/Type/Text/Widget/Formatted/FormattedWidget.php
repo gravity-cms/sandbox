@@ -53,7 +53,7 @@ class FormattedWidget extends AbstractFieldWidgetDefinition
     /**
      * {@inheritdoc}
      */
-    public function getAssetLibraries(array $options)
+    public function getAssetLibraries()
     {
         return [
             new FormattedWidgetAssetLibrary(),
