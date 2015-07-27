@@ -60,5 +60,6 @@ services:
     class: %gravity_admin.twig.assets_extension%
     arguments:
       - @gravity_admin.asset_manager
+      - @gravity_cms.field_manager
     tags:
       - { name: twig.extension }

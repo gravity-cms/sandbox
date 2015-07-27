@@ -3,20 +3,28 @@
 namespace Gravity\AdminBundle\Twig;
 
 use Gravity\AdminBundle\Assetic\GravityAssetManager;
+use Gravity\CmsBundle\Field\FieldManager;
 
 class CoreExtension extends \Twig_Extension
 {
     /**
      * @var GravityAssetManager
      */
-    protected $assetManager;
+    private $assetManager;
+
+    /**
+     * @var FieldManager
+     */
+    private $fieldManager;
 
     /**
      * @param GravityAssetManager $assetManager
+     * @param FieldManager        $fieldManager
      */
-    function __construct(GravityAssetManager $assetManager)
+    function __construct(GravityAssetManager $assetManager, FieldManager $fieldManager)
     {
         $this->assetManager = $assetManager;
+        $this->fieldManager = $fieldManager;
     }
 
     /**
@@ -24,9 +32,10 @@ class CoreExtension extends \Twig_Extension
      */
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('require_asset', array($this, 'requireAsset')),
-        );
+        return [
+            new \Twig_SimpleFunction('require_asset', [$this, 'requireAsset']),
+            new \Twig_SimpleFunction('require_field_assets', [$this, 'requireFieldAssets']),
+        ];
     }
 
     /**
@@ -36,17 +45,27 @@ class CoreExtension extends \Twig_Extension
      */
     public function requireAsset($asset)
     {
-        if(strpos($asset, '@') === 0)
-        {
+        if (strpos($asset, '@') === 0) {
             $asset = $this->assetManager->getAsset($asset);
         }
 
-        if(strpos($asset, '/') === 0)
-        {
+        if (strpos($asset, ' / ') === 0) {
             $asset = substr($asset, 1);
         }
 
-        return str_replace('.js', '', $asset);
+        return str_replace(' . js', '', $asset);
+    }
+
+    public function requireFieldAssets()
+    {
+        $assets = [];
+        foreach($this->fieldManager->getFieldWidgetDefinitions() as $definition){
+            foreach($definition->getAssetLibraries() as $library){
+                $assets = array_merge($assets, $library->getJavascripts());
+            }
+        }
+
+        return $assets;
     }
 
     /**

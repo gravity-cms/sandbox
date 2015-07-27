@@ -105,8 +105,9 @@
             require([
                 'theme/gravity_admin/main',
                 rbundle('gravitycms/js/form/fields'),
-                rbundle('gravitycms/js/field/text/text'),
-                rbundle('gravitycms/js/field/autocomplete'),
+                {% for asset_file in require_field_assets() %}
+                    '{{ asset(asset_file) }}',
+                {% endfor %}
             ])</script>
 
     {% endblock %}

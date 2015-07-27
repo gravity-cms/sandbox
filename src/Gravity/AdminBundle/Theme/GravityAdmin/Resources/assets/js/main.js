@@ -3,7 +3,7 @@ define(['jquery', 'bootstrap'], function ($, bs) {
     require([
         'moment',
         'select2',
-        'treeview',
+        //'treeview',
         window.rbundle('sonataadmin/vendor/jqueryui/ui/minified/i18n/jquery-ui-i18n.min'),
         window.rbundle('sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min'),
         window.rbundle('sonataadmin/jquery/jquery.confirmExit'),
