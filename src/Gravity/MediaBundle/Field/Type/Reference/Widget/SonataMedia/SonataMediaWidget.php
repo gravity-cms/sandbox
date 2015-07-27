@@ -1,21 +1,19 @@
 <?php
 
 
-namespace Gravity\MediaBundle\Field\Type\Reference\Widget\SonataUpload;
+namespace Gravity\MediaBundle\Field\Type\Reference\Widget\SonataMedia;
 
 use Gravity\CmsBundle\Field\AbstractFieldWidgetDefinition;
 use Gravity\CmsBundle\Field\FieldDefinitionInterface;
 use Gravity\CmsBundle\Field\Type\Reference\ReferenceField;
-use Gravity\MediaBundle\Field\Type\Media\MediaField;
-use Symfony\Component\Form\AbstractType;
 
 /**
- * Class SonataUploadWidget
+ * Class SonataMediaWidget
  *
- * @package Gravity\MediaBundle\Field\Type\Media\Widget\SonataUpload
- * @author  Andy Thorne <contrabandvr@gmail.com>
+ * @package Gravity\MediaBundle\Field\Type\Reference\Widget\SonataMedia
+ * @author  Andy Thorne <contrabandvr@gmail.com>s
  */
-class SonataUploadWidget extends AbstractFieldWidgetDefinition
+class SonataMediaWidget extends AbstractFieldWidgetDefinition
 {
     /**
      * @inheritDoc
@@ -46,7 +44,7 @@ class SonataUploadWidget extends AbstractFieldWidgetDefinition
      */
     public function getName()
     {
-        return 'sonata.upload';
+        return 'sonata.media';
     }
 
     /**

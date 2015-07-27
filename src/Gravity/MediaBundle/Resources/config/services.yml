@@ -1,5 +1,18 @@
 services:
-  gravity_cms.field.reference.widget.sonata_upload:
-    class: Gravity\MediaBundle\Field\Type\Reference\Widget\SonataUpload\SonataUploadWidget
+  gravity_cms.form.type.gravity_media_type:
+    class: Gravity\MediaBundle\Form\MediaType
+    arguments:
+      - @sonata.media.pool
+      - ~
+    tags:
+      - { name: form.type, alias: gravity_media_type }
+
+  gravity_cms.field.reference.widget.sonata_media:
+    class: Gravity\MediaBundle\Field\Type\Reference\Widget\SonataMedia\SonataMediaWidget
+    tags:
+      - { name: gravity_cms.field.widget }
+
+  gravity_cms.field.reference.widget.gravity_media:
+    class: Gravity\MediaBundle\Field\Type\Reference\Widget\GravityMedia\GravityMediaWidget
     tags:
       - { name: gravity_cms.field.widget }
