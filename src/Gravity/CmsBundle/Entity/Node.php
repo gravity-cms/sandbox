@@ -51,7 +51,7 @@ abstract class Node extends FieldableEntity
 
     function __construct()
     {
-        $this->createdBy = new \DateTime();
+        $this->createdOn = new \DateTime();
     }
 
     function __toString()
