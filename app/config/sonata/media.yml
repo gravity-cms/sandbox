@@ -10,6 +10,12 @@ doctrine:
         types:
             json: Sonata\Doctrine\Types\JsonType
 
+twig:
+    form:
+        resources:
+            # other files
+            - 'SonataMediaBundle:Form:media_widgets.html.twig'
+
 sonata_media:
     # if you don't use default namespace configuration
     class:

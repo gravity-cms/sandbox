@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Gravity\MediaBundle\Field\Type\Media;
+namespace Gravity\MediaBundle\Field\Type\Reference;
 
 use Gravity\CmsBundle\Field\FieldDefinitionInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

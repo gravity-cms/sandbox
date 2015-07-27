@@ -1,4 +1,5 @@
 services:
-#    gravity_media.example:
-#        class: Gravity\MediaBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+  gravity_cms.field.reference.widget.sonata_upload:
+    class: Gravity\MediaBundle\Field\Type\Reference\Widget\SonataUpload\SonataUploadWidget
+    tags:
+      - { name: gravity_cms.field.widget }

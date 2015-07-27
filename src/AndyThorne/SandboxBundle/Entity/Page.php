@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Gravity\CmsBundle\Entity\FieldBoolean;
 use Gravity\CmsBundle\Entity\FieldText;
 use Gravity\CmsBundle\Entity\Node;
+use Gravity\MediaBundle\Entity\Media;
 use Gravity\TagBundle\Entity\Tag;
 
 /**
@@ -25,6 +26,11 @@ class Page extends Node
      * @var Tag[]
      */
     protected $tags;
+
+    /**
+     * @var Media
+     */
+    protected $leadImage;
 
     /**
      * @var string
@@ -204,5 +210,21 @@ class Page extends Node
     public function removeTag(Tag $tag)
     {
         $this->tags->removeElement($tag);
+    }
+
+    /**
+     * @return Media
+     */
+    public function getLeadImage()
+    {
+        return $this->leadImage;
+    }
+
+    /**
+     * @param Media $leadImage
+     */
+    public function setLeadImage(Media $leadImage)
+    {
+        $this->leadImage = $leadImage;
     }
 }

@@ -28,6 +28,16 @@ fields:
         handler: taxonomy
         allow_new: true
 
+  leadImage:
+    type: reference
+    options:
+      limit: 1
+      required: true
+      entity: Gravity\MediaBundle\Entity\Media
+    widget:
+      type: sonata.upload
+      options: ~
+
   body:
     type: text
     dynamic: true
