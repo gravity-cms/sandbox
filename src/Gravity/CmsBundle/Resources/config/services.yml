@@ -50,6 +50,13 @@ services:
     tags:
       - { name: form.type, alias: auto_complete }
 
+  gravity_cms.form.type.hidden_entity:
+    class: Gravity\CmsBundle\Form\Type\HiddenEntityIdType
+    arguments:
+      - @doctrine.orm.default_entity_manager
+    tags:
+      - { name: form.type, alias: hidden_entity }
+
   #
   # Node validators
   validator.routable:
