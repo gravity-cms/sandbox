@@ -1,0 +1,21 @@
+.gravity-media-widget {
+  position: relative;
+  padding: 10px;
+
+  .media-img {
+    float: left;
+
+    .media-remove {
+      margin-top: 10px;
+    }
+  }
+
+  .media-details {
+    margin-left: 120px;
+    display: block;
+
+    .media-row {
+      margin-bottom: 5px;
+    }
+  }
+}

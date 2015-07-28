@@ -28,23 +28,27 @@
 {% endblock sonata_media_type_widget %}
 
 {% block gravity_media_type_widget %}
-    <div class="gravity-media-widget clearfix">
+    <div class="gravity-media-widget clearfix ">
         {% if value is not empty and value.providerReference %}
             <div class="media-img pull-left">
-                {% thumbnail value, 'admin' with {'class': 'img-polaroid media-object'} %}
+
+                <button class="media-remove btn btn-sm btn-default"><i class="fa-times"></i> Remove File</button>
             </div>
 
             <div class="media-details">
-                {% if sonata_admin_enabled is defined and sonata_admin_enabled %}
-                    <a href="{{ url('admin_gravity_media_media_edit', {id: value.id}) }}"><strong>{{ value.name }}</strong></a>
-                {% else %}
-                    <strong>{{ value.name }}</strong>
-                {% endif %}
+                <div class="media-row">
+                    {% if sonata_admin_enabled is defined and sonata_admin_enabled %}
+                        <a href="{{ url('admin_gravity_media_media_edit', {id: value.id}) }}"><strong>{{ value.name }}</strong></a>
+                    {% else %}
+                        <strong>{{ value.name }}</strong>
+                    {% endif %}
+                </div>
+
+                <div class="media-row">
+                    <span type="label">{{ value.providerName|trans({}, 'SonataMediaBundle') }} ~ {{ value.context }}</span>
+                </div>
             </div>
 
-            <button class="btn btn-sm btn-default"><i class="fa-times"></i> Remove File</button>
-
-            <span type="label">{{ value.providerName|trans({}, 'SonataMediaBundle') }} ~ {{ value.context }}</span>
         {% else %}
             <div class="media-img pull-left">
                 <img src="{{ asset('bundles/sonatamedia/grey.png') }}" class="img-polaroid media-object" width="85" height="85"/>
@@ -58,3 +62,24 @@
         {{ block('form_widget') }}
     </div>
 {% endblock gravity_media_type_widget %}
+
+{% block gravity_media_widget_form_row %}
+    {{ block('form_row') }}
+{% endblock gravity_media_widget_form_row %}
+
+{% block gravity_media_widget_form_widget %}
+    <div class="gravity-media {% if value is not empty %}has-media{% endif %}">
+        {% if entity is not empty and entity.providerReference %}
+            {% thumbnail value, 'admin' with {'class': 'img-polaroid media-object'} %}
+            {% if sonata_admin_enabled is defined and sonata_admin_enabled %}
+                <a href="{{ url('admin_gravity_media_media_edit', {id: entity.id}) }}"><strong>{{ entity.name }}</strong></a>
+            {% else %}
+                <strong>{{ value.name }}</strong>
+            {% endif %}
+        {% endif %}
+        <div class="dropzone-box">
+            <!-- TODO: implement dropzone! -->
+        </div>
+    </div>
+    {{ form_widget(form) }}
+{% endblock gravity_media_widget_form_widget %}

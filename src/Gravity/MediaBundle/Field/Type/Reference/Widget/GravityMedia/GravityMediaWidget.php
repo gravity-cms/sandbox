@@ -3,6 +3,7 @@
 
 namespace Gravity\MediaBundle\Field\Type\Reference\Widget\GravityMedia;
 
+use Gravity\CmsBundle\Field\FieldDefinitionInterface;
 use Gravity\MediaBundle\Field\Type\Reference\Widget\SonataMedia\SonataMediaWidget;
 
 /**
@@ -13,14 +14,6 @@ use Gravity\MediaBundle\Field\Type\Reference\Widget\SonataMedia\SonataMediaWidge
  */
 class GravityMediaWidget extends SonataMediaWidget
 {
-    /**
-     * @inheritDoc
-     */
-    public function getForm()
-    {
-        return 'gravity_media_type';
-    }
-
     /**
      * @inheritDoc
      */
@@ -44,4 +37,41 @@ class GravityMediaWidget extends SonataMediaWidget
     {
         return 'Upload a file';
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getForm()
+    {
+        return new GravityMediaWidgetForm();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getFormOptions(
+        FieldDefinitionInterface $fieldDefinition,
+        $field,
+        array $fieldOptions,
+        $widget,
+        array $widgetOptions
+    ) {
+        return [
+            'class' => $fieldOptions['entity'],
+            'label' => $field,
+        ];
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function getAssetLibraries()
+    {
+        return [
+            new GravityMediaWidgetAssetLibrary(),
+        ];
+    }
+
+
 }
