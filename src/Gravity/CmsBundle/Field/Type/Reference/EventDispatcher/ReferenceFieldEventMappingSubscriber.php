@@ -58,8 +58,8 @@ class ReferenceFieldEventMappingSubscriber implements EventSubscriberInterface
 
             if(!$fieldDefinition->getEntityClass()) {
                 $mapping['targetEntity'] = $fieldOptions['options']['entity'];
+                $mapping['orderBy']      = [];
             }
-            $mapping['orderBy']      = [];
 
             $event->setMapping($mapping);
         }

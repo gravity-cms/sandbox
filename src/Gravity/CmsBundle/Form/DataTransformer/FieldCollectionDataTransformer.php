@@ -3,6 +3,8 @@
 namespace Gravity\CmsBundle\Form\DataTransformer;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Gravity\CmsBundle\Entity\Field;
+use Gravity\CmsBundle\Entity\Node;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
@@ -89,17 +91,18 @@ class FieldCollectionDataTransformer implements DataTransformerInterface
     public function reverseTransform($value)
     {
         if ($this->fieldOptions['limit'] > 0) {
-            $fieldCollection = new ArrayCollection();
-            $count = 1;
+            $fieldValues = [];
+
+            /** @var Field $field */
             foreach($value as $field){
-                if($count > $this->fieldOptions['limit']){
-                    break;
-                }
-                $fieldCollection[] = $field;
-                ++$count;
+                $fieldValues[(int) $field->getDelta()] = $field;
             }
 
-            return $fieldCollection;
+            if(count($fieldValues) > $this->fieldOptions['limit']){
+                $fieldValues = array_splice($fieldCollection, 0, $this->fieldOptions['limit']);
+            }
+
+            return new ArrayCollection($fieldValues);
         } else {
             return $value;
         }
