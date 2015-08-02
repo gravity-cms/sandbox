@@ -101,27 +101,26 @@
 
 {% block gravity_media_widget_form_widget %}
     <div class="gravity-media-widget {% if value is not empty %}has-media{% endif %}">
-        {% if value.media is not empty %}
+        {% if value is not empty %}
             {% media value.media, image_preview with {'class': 'img-polaroid media-object'} %}
             <div class="media-details">
-                {% if sonata_admin_enabled is defined and sonata_admin_enabled %}
-                    <div class="form-group">
-                        <strong class="control-label">
-                            Name
-                        </strong>
-                        <div class="">
+                <div class="form-group">
+                    <strong class="control-label">
+                        Name
+                    </strong>
+                    <div class="">
+                        {% if sonata_admin_enabled is defined and sonata_admin_enabled %}
                             <a href="{{ url('admin_gravity_media_media_edit', {id: value.media.id}) }}" class="media-name">
                                 {{ value.media.name }}
                             </a>
-                            <button type="button" class="btn btn-xs media-remove">
-                                <i class="fa-unlink"></i> Remove
-                            </button>
-                        </div>
+                        {% else %}
+                            {{ value.media.name }}
+                        {% endif %}
+                        <button type="button" class="btn btn-xs media-remove">
+                            <i class="fa-unlink"></i> Remove
+                        </button>
                     </div>
-                {% else %}
-                    <strong>Name</strong>:
-                    {{ value.media.name }}
-                {% endif %}
+                </div>
             </div>
         {% endif %}
         <div class="dropzone-box"
