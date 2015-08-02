@@ -16,10 +16,20 @@ class GravityMediaWidgetAssetLibrary extends AbstractAssetLibrary
     /**
      * @inheritDoc
      */
+    public function getJavascripts()
+    {
+        return [
+            'bundles/gravitymedia/js/field/gravity-media.js',
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getStylesheets()
     {
         return [
-            '@GravityMediaBundle/Resources/assets/sass/gravity-media-field.scss'
+            '@GravityMediaBundle/Resources/assets/sass/gravity-media-field.scss',
         ];
     }
 

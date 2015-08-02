@@ -13,10 +13,14 @@ use Sonata\MediaBundle\Entity\BaseMedia;
  */
 class Media extends BaseMedia
 {
+    /**
+     * @var int
+     *
+     */
     protected $id;
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getId()
     {

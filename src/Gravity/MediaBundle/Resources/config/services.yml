@@ -7,6 +7,11 @@ services:
     tags:
       - { name: form.type, alias: gravity_media_type }
 
+  gravity_cms.field.reference.media:
+    class: Gravity\MediaBundle\Field\Type\Reference\MediaField
+    tags:
+      - { name: gravity_cms.field }
+
   gravity_cms.field.reference.widget.sonata_media:
     class: Gravity\MediaBundle\Field\Type\Reference\Widget\SonataMedia\SonataMediaWidget
     tags:
@@ -16,3 +21,11 @@ services:
     class: Gravity\MediaBundle\Field\Type\Reference\Widget\GravityMedia\GravityMediaWidget
     tags:
       - { name: gravity_cms.field.widget }
+
+
+  gravity_cms.serializer.event_subscriber.meida:
+    class: Gravity\MediaBundle\Serializer\EventDispatcher\MediaEventSubscriber
+    arguments:
+      - @sonata.media.pool
+    tags:
+      - { name: jms_serializer.event_subscriber }

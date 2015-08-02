@@ -4,6 +4,7 @@
 namespace Gravity\MediaBundle\Field\Type\Reference;
 
 use Gravity\CmsBundle\Field\FieldDefinitionInterface;
+use Gravity\CmsBundle\Field\Type\Reference\ReferenceField;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -12,7 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * @package Gravity\MediaBundle\Field\Type\Media
  * @author  Andy Thorne <contrabandvr@gmail.com>
  */
-class MediaField implements FieldDefinitionInterface
+class MediaField extends ReferenceField
 {
     /**
      * @inheritDoc
@@ -43,7 +44,7 @@ class MediaField implements FieldDefinitionInterface
      */
     public function getEntityClass()
     {
-        // TODO: Implement getEntityClass() method.
+        return 'Gravity\MediaBundle\Entity\FieldMedia';
     }
 
     /**
@@ -51,15 +52,9 @@ class MediaField implements FieldDefinitionInterface
      */
     public function setOptions(OptionsResolver $optionsResolver)
     {
-        // TODO: Implement setOptions() method.
-    }
+        parent::setOptions($optionsResolver);
 
-    /**
-     * @inheritDoc
-     */
-    public function getConstraints($field, array $options)
-    {
-        // TODO: Implement getConstraints() method.
+        $optionsResolver->setRequired(['provider']);
+        $optionsResolver->setDefault('provider_context', 'default');
     }
-
 }

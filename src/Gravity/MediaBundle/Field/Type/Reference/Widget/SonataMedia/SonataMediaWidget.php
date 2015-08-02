@@ -5,7 +5,7 @@ namespace Gravity\MediaBundle\Field\Type\Reference\Widget\SonataMedia;
 
 use Gravity\CmsBundle\Field\AbstractFieldWidgetDefinition;
 use Gravity\CmsBundle\Field\FieldDefinitionInterface;
-use Gravity\CmsBundle\Field\Type\Reference\ReferenceField;
+use Gravity\MediaBundle\Field\Type\Reference\MediaField;
 
 /**
  * Class SonataMediaWidget
@@ -68,7 +68,7 @@ class SonataMediaWidget extends AbstractFieldWidgetDefinition
      */
     public function supportsField(FieldDefinitionInterface $field)
     {
-        return $field instanceof ReferenceField;
+        return $field instanceof MediaField;
     }
 
 }

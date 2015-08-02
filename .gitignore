@@ -15,8 +15,8 @@
 .idea
 node_modules
 
-/web/uploads/*
-!/web/uploads/*/.gitkeep
+/web/uploads/media/*
+!/web/uploads/media/.gitkeep
 /web/js
 /web/css
 /web/img

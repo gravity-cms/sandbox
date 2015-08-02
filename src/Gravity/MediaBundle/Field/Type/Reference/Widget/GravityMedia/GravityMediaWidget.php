@@ -5,6 +5,7 @@ namespace Gravity\MediaBundle\Field\Type\Reference\Widget\GravityMedia;
 
 use Gravity\CmsBundle\Field\FieldDefinitionInterface;
 use Gravity\MediaBundle\Field\Type\Reference\Widget\SonataMedia\SonataMediaWidget;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class GravityMediaWidget
@@ -41,6 +42,14 @@ class GravityMediaWidget extends SonataMediaWidget
     /**
      * @inheritDoc
      */
+    public function setOptions(OptionsResolver $optionsResolver)
+    {
+        $optionsResolver->setDefault('image_preview', 'admin');
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getForm()
     {
         return new GravityMediaWidgetForm();
@@ -56,9 +65,11 @@ class GravityMediaWidget extends SonataMediaWidget
         $widget,
         array $widgetOptions
     ) {
-        return [
-            'class' => $fieldOptions['entity'],
-            'label' => $field,
+        return parent::getFormOptions($fieldDefinition, $field, $fieldOptions, $widget, $widgetOptions) + [
+            'field'          => $fieldDefinition,
+            'field_options'  => $fieldOptions,
+            'widget_options' => $widgetOptions,
+            'data_class'     => $fieldDefinition->getEntityClass(),
         ];
     }
 

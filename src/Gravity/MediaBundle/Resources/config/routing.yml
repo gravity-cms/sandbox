@@ -1,3 +1,8 @@
 gravity_media_homepage:
     path:     /hello/{name}
     defaults: { _controller: GravityMediaBundle:Default:index }
+
+sonata_api_media:
+    type:         rest
+    prefix:       /api
+    resource:     "@SonataMediaBundle/Resources/config/routing/api.xml"

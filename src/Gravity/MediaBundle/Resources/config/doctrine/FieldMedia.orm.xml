@@ -1,0 +1,17 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+
+    <entity name="Gravity\MediaBundle\Entity\FieldMedia" table="field_media">
+        <field name="title" type="string" length="255" nullable="true" />
+        <field name="alt" type="string" length="255" nullable="true" />
+
+        <many-to-one target-entity="Gravity\MediaBundle\Entity\Media" field="media" orphan-removal="false">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </many-to-one>
+    </entity>
+
+</doctrine-mapping>

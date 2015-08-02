@@ -27,6 +27,12 @@ class AppKernel extends Kernel
 
             new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
 
+            // API Bundles
+            new FOS\RestBundle\FOSRestBundle(),
+            new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle(),
+
+            // User Bundles
             new FOS\UserBundle\FOSUserBundle(),
             new Sonata\UserBundle\SonataUserBundle('FOSUserBundle'),
 
@@ -43,11 +49,12 @@ class AppKernel extends Kernel
             new Gravity\AdminBundle\GravityAdminBundle('SonataAdminBundle'),
             new Hearsay\RequireJSBundle\HearsayRequireJSBundle(),
 
+            // Routing
             new Symfony\Cmf\Bundle\RoutingBundle\CmfRoutingBundle(),
+
             new Gravity\TagBundle\GravityTagBundle(),
             new Gravity\MediaBundle\GravityMediaBundle(),
 
-            new JMS\SerializerBundle\JMSSerializerBundle(),
             new Sonata\MediaBundle\SonataMediaBundle(),
         );
 
