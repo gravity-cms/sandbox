@@ -87,7 +87,7 @@ class ReferenceField implements FieldDefinitionInterface
      */
     public function getConstraints($field, array $options)
     {
-        // TODO: Implement getConstraints() method.
+        return [];
     }
 
 }

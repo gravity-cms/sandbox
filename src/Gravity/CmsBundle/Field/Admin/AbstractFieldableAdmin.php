@@ -104,13 +104,7 @@ class AbstractFieldableAdmin extends Admin
                             if (!$value || !count($value) && $settings['options']['limit'] == 1) {
                                 $fieldClass = $fieldDefinition->getEntityClass();
                                 if($fieldClass) {
-                                    $data->{"set{$field}"}(
-                                        new ArrayCollection(
-                                            [
-                                                new $fieldClass(),
-                                            ]
-                                        )
-                                    );
+                                    $data->{"set{$field}"}(new $fieldClass());
                                 }
                             }
                         }
