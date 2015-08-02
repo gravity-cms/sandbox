@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Gravity\CmsBundle\Entity\FieldBoolean;
 use Gravity\CmsBundle\Entity\FieldText;
 use Gravity\CmsBundle\Entity\Node;
-use Gravity\MediaBundle\Entity\Media;
+use Gravity\MediaBundle\Entity\FieldMedia;
 use Gravity\TagBundle\Entity\Tag;
 
 /**
@@ -28,7 +28,7 @@ class Page extends Node
     protected $tags;
 
     /**
-     * @var Media
+     * @var FieldMedia
      */
     protected $leadImage;
 
@@ -213,7 +213,7 @@ class Page extends Node
     }
 
     /**
-     * @return Media
+     * @return FieldMedia
      */
     public function getLeadImage()
     {
@@ -221,9 +221,9 @@ class Page extends Node
     }
 
     /**
-     * @param Media $leadImage
+     * @param FieldMedia $leadImage
      */
-    public function setLeadImage(Media $leadImage)
+    public function setLeadImage(FieldMedia $leadImage)
     {
         $this->leadImage = $leadImage;
     }

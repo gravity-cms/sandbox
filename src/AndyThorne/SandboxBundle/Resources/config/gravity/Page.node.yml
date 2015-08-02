@@ -29,14 +29,17 @@ fields:
         allow_new: true
 
   leadImage:
-    type: reference
+    type: media
     options:
       limit: 1
       required: true
       entity: Gravity\MediaBundle\Entity\Media
+      provider: sonata.media.provider.image
+      provider_context: default
     widget:
-      type: sonata.upload
-      options: ~
+      type: gravity.media
+      options:
+        image_preview: big
 
   body:
     type: text
