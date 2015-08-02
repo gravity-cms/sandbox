@@ -54,6 +54,18 @@ fields:
       options:
         default: 'Default Text'
 
+  galleryImages:
+    type: media
+    options:
+      limit: 20
+      entity: Gravity\MediaBundle\Entity\Media
+      provider: sonata.media.provider.image
+      provider_context: default
+    widget:
+      type: gravity.media
+      options:
+        image_preview: big
+
   rating:
     type: number
     dynamic: true

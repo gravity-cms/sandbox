@@ -61,11 +61,18 @@ class Page extends Node
      */
     protected $parent;
 
+    /**
+     * @var FieldMedia[]
+     */
+    protected $galleryImages;
+
     function __construct()
     {
         parent::__construct();
-        $this->urls = new ArrayCollection();
-        $this->tags = new ArrayCollection();
+
+        $this->urls          = new ArrayCollection();
+        $this->tags          = new ArrayCollection();
+        $this->galleryImages = new ArrayCollection();
     }
 
     /**
@@ -226,5 +233,29 @@ class Page extends Node
     public function setLeadImage(FieldMedia $leadImage)
     {
         $this->leadImage = $leadImage;
+    }
+
+    /**
+     * @return FieldMedia[]
+     */
+    public function getGalleryImages()
+    {
+        return $this->galleryImages;
+    }
+
+    /**
+     * @param FieldMedia $galleryImage
+     */
+    public function addGalleryImage(FieldMedia $galleryImage)
+    {
+        $this->galleryImages[] = $galleryImage;
+    }
+
+    /**
+     * @param FieldMedia $galleryImage
+     */
+    public function removeGalleryImage(FieldMedia $galleryImage)
+    {
+        $this->galleryImages->removeElement($galleryImage);
     }
 }
