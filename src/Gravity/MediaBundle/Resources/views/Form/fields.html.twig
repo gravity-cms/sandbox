@@ -101,28 +101,37 @@
 
 {% block gravity_media_widget_form_widget %}
     <div class="gravity-media-widget {% if value is not empty %}has-media{% endif %}">
-        {% if value is not empty %}
+        {% if value is not empty and value.media is not empty %}
             {% media value.media, image_preview with {'class': 'img-polaroid media-object'} %}
-            <div class="media-details">
-                <div class="form-group">
-                    <strong class="control-label">
-                        Name
-                    </strong>
-                    <div class="">
+        {% else %}
+            <img src="" class="img-polaroid media-object">
+        {% endif %}
+        <div class="media-details">
+            <div class="form-group">
+                <strong class="control-label">
+                    Name
+                </strong>
+                <div class="">
+                    {% if value is not empty and value.media is not empty %}
                         {% if sonata_admin_enabled is defined and sonata_admin_enabled %}
                             <a href="{{ url('admin_gravity_media_media_edit', {id: value.media.id}) }}" class="media-name">
                                 {{ value.media.name }}
                             </a>
                         {% else %}
-                            {{ value.media.name }}
+                            <span class="media-name">{{ value.media.name }}</span>
                         {% endif %}
-                        <button type="button" class="btn btn-xs media-remove">
-                            <i class="fa-unlink"></i> Remove
-                        </button>
-                    </div>
+                    {% else %}
+                        <span class="media-name"></span>
+                    {% endif %}
+                    <button type="button" class="btn btn-xs media-remove">
+                        <i class="fa-unlink"></i> Change
+                    </button>
                 </div>
             </div>
-        {% endif %}
+            <div class="media-form-fields">
+                {{ form_widget(form) }}
+            </div>
+        </div>
         <div class="dropzone-box"
              data-url="{{ path('sonata_api_media_media_post_provider_medium', {provider: provider, _format: 'json'}) }}"
              data-context="{{ provider_context }}"
@@ -132,9 +141,6 @@
                     <i class="fa fa-cloud-upload"></i>
                     Drop files in here<br><span class="dz-text-small">or click to pick manually</span>
                 </div>
-        </div>
-        <div class="media-form-fields">
-            {{ form_widget(form) }}
         </div>
     </div>
 {% endblock gravity_media_widget_form_widget %}

@@ -1,5 +1,5 @@
 routing:
-  path: /{title}
+  path: /{category}/{title}
   extendable: true
 
 search:
@@ -53,6 +53,18 @@ fields:
       type: text.formatted
       options:
         default: 'Default Text'
+
+  video:
+    type: media
+    options:
+      limit: 1
+      required: true
+      entity: Gravity\MediaBundle\Entity\Media
+      provider: sonata.media.provider.youtube
+      provider_context: default
+    widget:
+      type: sonata.media
+      options: ~
 
   galleryImages:
     type: media

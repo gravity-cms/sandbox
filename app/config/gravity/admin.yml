@@ -67,3 +67,10 @@ hearsay_require_js:
             exports: Select2
         treeview:
             deps: [jquery]
+
+fos_rest:
+    param_fetcher_listener: true
+    body_listener: true
+    format_listener: true
+    view:
+        view_response_listener: 'force'

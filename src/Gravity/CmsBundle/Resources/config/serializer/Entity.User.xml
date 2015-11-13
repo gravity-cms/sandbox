@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serializer>
+    <class name="Gravity\CmsBundle\Entity\User" exclusion-policy="all">
+        <property name="id" type="integer" expose="true" />
+        <discriminator-class value="type">Sonata\UserBundle\Entity\User</discriminator-class>
+    </class>
+</serializer>

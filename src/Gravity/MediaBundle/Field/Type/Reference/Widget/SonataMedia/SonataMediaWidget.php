@@ -6,6 +6,7 @@ namespace Gravity\MediaBundle\Field\Type\Reference\Widget\SonataMedia;
 use Gravity\CmsBundle\Field\AbstractFieldWidgetDefinition;
 use Gravity\CmsBundle\Field\FieldDefinitionInterface;
 use Gravity\MediaBundle\Field\Type\Reference\MediaField;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class SonataMediaWidget
@@ -15,30 +16,6 @@ use Gravity\MediaBundle\Field\Type\Reference\MediaField;
  */
 class SonataMediaWidget extends AbstractFieldWidgetDefinition
 {
-    /**
-     * @inheritDoc
-     */
-    public function getForm()
-    {
-        return 'sonata_media_type';
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function getFormOptions(
-        FieldDefinitionInterface $fieldDefinition,
-        $field,
-        array $fieldOptions,
-        $widget,
-        array $widgetOptions
-    ) {
-        return [
-            'provider' => 'sonata.media.provider.image',
-            'context'  => 'default'
-        ];
-    }
-
     /**
      * @inheritDoc
      */
@@ -62,6 +39,44 @@ class SonataMediaWidget extends AbstractFieldWidgetDefinition
     {
         return 'Media via default Sonata Form';
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getForm()
+    {
+        return new SonataMediaWidgetForm();
+//        return 'sonata_media_type';
+    }
+
+//    /**
+//     * @inheritDoc
+//     */
+//    protected function getFormOptions(
+//        FieldDefinitionInterface $fieldDefinition,
+//        $field,
+//        array $fieldOptions,
+//        $widget,
+//        array $widgetOptions
+//    ) {
+//        return [
+//            'provider' => $fieldOptions['provider'],
+//            'context'  => 'default'
+//        ];
+//    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setOptions(OptionsResolver $optionsResolver)
+    {
+        $optionsResolver->setDefaults(
+            [
+                'provider' => null,
+            ]
+        );
+    }
+
 
     /**
      * @inheritDoc

@@ -50,6 +50,14 @@ define(['jquery', 'jqueryui', 'bootstrap'], function ($, ui, bs) {
 
                 return c;
             };
+
+            var indexWidgets = function(){
+                var i = 0;
+                $fieldGroupList.children().each(function(){
+                    $(this).find('[name$="[delta]"]').val(i);
+                    ++i;
+                });
+            };
             $addButton.on('click', function () {
                 if(widgetLimit !== -1 && refreshWidgetState() >= widgetLimit){
                     return false;
@@ -62,6 +70,7 @@ define(['jquery', 'jqueryui', 'bootstrap'], function ($, ui, bs) {
                     nodeForm.bindWidget(widgetType, $newElement);
                 }
                 refreshWidgetState();
+                indexWidgets();
                 $newElement.trigger('sonata-admin-append-form-element');
             });
             $fieldGroup.on('click', '.form-delete-widget', function(){
@@ -80,13 +89,7 @@ define(['jquery', 'jqueryui', 'bootstrap'], function ($, ui, bs) {
                     axis: "y",
                     containment: "parent",
                     handle: '.field-sort-icon',
-                    update: function (e, ui){
-                        var i = 0;
-                        $fieldGroupList.children().each(function(){
-                            $(this).find('[name$="[delta]"]').val(i);
-                            ++i;
-                        });
-                    }
+                    update: indexWidgets
                 });
                 //$fieldGroupList.disableSelection();
             }

@@ -31,11 +31,15 @@ class Page extends Node
      * @var FieldMedia
      */
     protected $leadImage;
-
     /**
      * @var string
      */
     protected $body;
+
+    /**
+     * @var FieldMedia
+     */
+    protected $video;
 
     /**
      * @var FieldText[]
@@ -105,6 +109,22 @@ class Page extends Node
     public function setBody($body)
     {
         $this->body = $body;
+    }
+
+    /**
+     * @return FieldMedia
+     */
+    public function getVideo()
+    {
+        return $this->video;
+    }
+
+    /**
+     * @param FieldMedia $video
+     */
+    public function setVideo(FieldMedia $video)
+    {
+        $this->video = $video;
     }
 
     /**

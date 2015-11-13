@@ -3,13 +3,13 @@
 
 namespace AndyThorne\SandboxBundle\Entity;
 
-use Sonata\UserBundle\Entity\BaseUser;
+use Gravity\CmsBundle\Entity\User as BaseUser;
 
 /**
  * Class User
  *
  * @package AndyThorne\SandboxBundle\Entity
- * @author Andy Thorne <contrabandvr@gmail.com>
+ * @author  Andy Thorne <contrabandvr@gmail.com>
  */
 class User extends BaseUser
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Gravity\MediaBundle\Field\Type\Reference\Widget\GravityMedia;
+namespace Gravity\MediaBundle\Field\Type\Reference\Widget\SonataMedia;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -9,12 +9,12 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Class GravityMediaWidgetForm
+ * Class SonataMediaWidgetForm
  *
- * @package Gravity\MediaBundle\Field\Type\Reference\Widget\GravityMedia
+ * @package Gravity\MediaBundle\Field\Type\Reference\Widget\SonataMedia
  * @author  Andy Thorne <contrabandvr@gmail.com>
  */
-class GravityMediaWidgetForm extends AbstractType
+class SonataMediaWidgetForm extends AbstractType
 {
     /**
      * @inheritDoc
@@ -24,23 +24,15 @@ class GravityMediaWidgetForm extends AbstractType
         $builder
             ->add(
                 'media',
-                'hidden_entity',
+                'sonata_media_type',
                 [
-                    'class'    => $options['field_options']['entity']
+                    'provider'   => $options['field_options']['provider'],
+                    'data_class' => $options['field_options']['entity'],
+                    'required' => false,
                 ]
             )
             ->add('title', 'text')
             ->add('alt', 'text');
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function buildView(FormView $view, FormInterface $form, array $options)
-    {
-        $view->vars['provider']         = $options['field_options']['provider'];
-        $view->vars['provider_context'] = $options['field_options']['provider_context'];
-        $view->vars['image_preview']    = $options['widget_options']['image_preview'];
     }
 
     /**
@@ -64,7 +56,7 @@ class GravityMediaWidgetForm extends AbstractType
      */
     public function getName()
     {
-        return 'gravity_media_widget_form';
+        return 'sonata_media_widget_form';
     }
 
     /**

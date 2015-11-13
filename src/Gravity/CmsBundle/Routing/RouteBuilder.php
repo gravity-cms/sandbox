@@ -120,7 +120,7 @@ class RouteBuilder
             $params = [];
             foreach ($urlVars as $vi => $var) {
                 $method = new \ReflectionMethod($class, "get{$var}");
-                $value  = $method->invoke($node);
+                $value  = (string) $method->invoke($node);
                 //
                 if ($i > 0 && $urlVarCount == $vi) {
                     $value .= " {$i}";
@@ -162,18 +162,22 @@ class RouteBuilder
             }
         }
 
+//        $path .= '.{_format}';
 
         $route = new Route();
         $route->setDefaults(
             [
+                '_format'     => 'html',
                 '_controller' => 'Gravity\CmsBundle\Controller\NodeController::viewAction',
                 'nodeId'      => $node->getId(),
                 'type'        => $class,
             ]
         );
-        $route->setVariablePattern("");
+
+        $route->setVariablePattern($path.".{_format}");
         $route->setStaticPrefix($path);
         $route->setName($this->buildRouteName($route));
+        $route->setPath($path);
 
         $node->setPath($path);
 

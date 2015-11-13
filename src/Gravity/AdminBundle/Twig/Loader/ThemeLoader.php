@@ -29,7 +29,7 @@ class ThemeLoader extends FilesystemLoader
     /**
      * {@inheritdoc}
      */
-    protected function findTemplate($template)
+    protected function findTemplate($template, $throw = true)
     {
         $templateName = (string) $template;
 

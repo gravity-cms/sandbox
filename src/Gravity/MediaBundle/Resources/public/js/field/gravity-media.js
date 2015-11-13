@@ -18,6 +18,7 @@ define(
                     $scope.find('.gravity-media-widget').each(function () {
                         var $widgetContainer = $(this);
                         var $dropzone = $widgetContainer.find('.dropzone-box');
+                        var $mediaDetails = $widgetContainer.find('.media-details');
                         var $fieldContainer = $widgetContainer.find('.media-form-fields');
                         var $mediaIdField = $fieldContainer.find('input[name$="[media]"]');
                         var $mediaImage = $widgetContainer.find('img.media-object');
@@ -26,7 +27,7 @@ define(
                         var imagePreviewType = $dropzone.data('image-preview');
 
                         if(!$mediaIdField.val()){
-                            $fieldContainer.hide();
+                            $mediaDetails.hide();
                         } else {
                             $dropzone.hide();
                         }
@@ -46,7 +47,7 @@ define(
                                 });
                                 $mediaName.text(response.name);
 
-                                $fieldContainer.show();
+                                $mediaDetails.show();
                                 $dropzone.hide();
                             }
 

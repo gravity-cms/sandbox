@@ -58,8 +58,11 @@ class MediaEventSubscriber implements EventSubscriberInterface
             $styles = [];
 
             $provider = $this->mediaPool->getProvider($object->getProviderName());
-            foreach($this->mediaPool->getFormatNamesByContext($object->getContext()) as $formatName => $format){
-                $styles[$formatName] = $provider->generatePublicUrl($object, $formatName);
+            $formats = $this->mediaPool->getFormatNamesByContext($object->getContext());
+            if(is_array($formats)) {
+                foreach ($formats as $formatName => $format) {
+                    $styles[$formatName] = $provider->generatePublicUrl($object, $formatName);
+                }
             }
 
             $visitor->addData('styles', $styles);

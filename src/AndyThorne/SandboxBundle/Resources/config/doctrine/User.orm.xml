@@ -4,10 +4,6 @@
                    https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
 
     <entity name="AndyThorne\SandboxBundle\Entity\User" table="security_user">
-        <id name="id" type="integer">
-            <generator strategy="AUTO" />
-        </id>
-        
         <many-to-many target-entity="Group" field="groups">
             <join-table name="security_user_group">
                 <join-columns>
