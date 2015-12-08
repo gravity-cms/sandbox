@@ -54,6 +54,9 @@ hearsay_require_js:
         moment:
             location: ../bundles/sonatacore/vendor/moment/min/moment.min
             external: true
+        xeditable:
+            location: ../bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min
+            external: true
 
     shim:
         bootstrap:

@@ -7,6 +7,11 @@
         <id name="id" type="integer">
             <generator strategy="AUTO" />
         </id>
+
+        <many-to-one target-entity="Gravity\MediaBundle\Entity\Gallery" field="gallery" inversed-by="galleryHasMedias">
+        </many-to-one>
+        <many-to-one target-entity="Gravity\MediaBundle\Entity\Media" field="media" inversed-by="galleryHasMedias">
+        </many-to-one>
     </entity>
 
 </doctrine-mapping>

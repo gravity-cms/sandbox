@@ -9,9 +9,8 @@ define(['jquery', 'bootstrap'], function ($, bs) {
         window.rbundle('sonataadmin/jquery/jquery.confirmExit'),
         window.rbundle('sonataadmin/vendor/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min'),
         //window.rbundle('sonataadmin/App'),
-        window.rbundle('sonataadmin/Admin')
     ], function () {
-
+        require([window.rbundle('sonataadmin/Admin')]);
     });
 
     var _expanded = false,
