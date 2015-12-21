@@ -12,6 +12,9 @@
 
 
         <many-to-one target-entity="Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route" field="route">
+            <cascade>
+                <cascade-persist />
+            </cascade>
         </many-to-one>
     </mapped-superclass>
 

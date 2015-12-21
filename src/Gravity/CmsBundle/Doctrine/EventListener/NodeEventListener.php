@@ -51,6 +51,7 @@ class NodeEventListener implements EventSubscriber
         return [
             Events::onFlush,
             Events::prePersist,
+            Events::postPersist,
             Events::postRemove,
         ];
     }
@@ -70,6 +71,19 @@ class NodeEventListener implements EventSubscriber
                 $entity->setEditedBy($user);
                 $entity->setEditedOn(new \DateTime());
                 $this->recomputeSingleEntityChangeSet($em, $entity);
+            }
+        }
+    }
+
+    public function postPersist(LifecycleEventArgs $args)
+    {
+        $entity = $args->getEntity();
+        $em     = $args->getEntityManager();
+        if ($entity instanceof Node) {
+            if(!$entity->getRoute() instanceof Route){
+                $route = $this->getNodeRoute($entity);
+                $entity->setRoute($route);
+                $em->flush();
             }
         }
     }
@@ -169,7 +183,7 @@ class NodeEventListener implements EventSubscriber
 
                 $oldRoute = $entity->getRoute();
 
-                // Check if we have a route. If not, create on and continue
+                // Check if we have a route. If not, create one and continue
                 if (!$oldRoute instanceof Route) {
                     // create the new route
                     $oldRoute = $this->getNodeRoute($entity);
@@ -189,7 +203,7 @@ class NodeEventListener implements EventSubscriber
                     $this->computeChangeSet($em, $newRoute);
 
                     // set any old route to redirect to the new route
-                    $this->redirectRoute($oldRoute, $newRoute->getPath());
+                    $this->redirectRoute($oldRoute);
                     $this->recomputeSingleEntityChangeSet($em, $oldRoute);
                 }
 
@@ -213,18 +227,6 @@ class NodeEventListener implements EventSubscriber
                 $this->recomputeSingleEntityChangeSet($em, $entity);
             }
         }
-
-        // create 200 routes for new nodes
-        foreach ($uow->getScheduledEntityInsertions() as $entity) {
-            if ($entity instanceof Node) {
-                $route = $this->getNodeRoute($entity);
-                $em->persist($route);
-                $this->computeChangeSet($em, $route);
-
-                $entity->setRoute($route);
-                $this->recomputeSingleEntityChangeSet($em, $entity);
-            }
-        }
     }
 
     /**
@@ -243,19 +245,12 @@ class NodeEventListener implements EventSubscriber
      * Redirect a route to a new url
      *
      * @param Route  $route
-     * @param string $newPath
      *
      * @return \Symfony\Component\Routing\Route
      */
-    protected function redirectRoute(Route $route, $newPath)
+    protected function redirectRoute(Route $route)
     {
-        return $route->setDefaults(
-            [
-                '_controller' => 'FrameworkBundle:Redirect:urlRedirect',
-                'path'        => $newPath,
-                'permanent'   => true,
-            ]
-        );
+        $route->setDefault('_controller', 'GravityCmsBundle:Node:redirect');
     }
 
     /**

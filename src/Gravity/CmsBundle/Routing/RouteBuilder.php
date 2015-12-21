@@ -162,8 +162,6 @@ class RouteBuilder
             }
         }
 
-//        $path .= '.{_format}';
-
         $route = new Route();
         $route->setDefaults(
             [
@@ -173,10 +171,11 @@ class RouteBuilder
                 'type'        => $class,
             ]
         );
-
-        $route->setVariablePattern($path.".{_format}");
+        $route->setOptions([
+            'add_format_pattern' => true
+        ]);
+        $route->setName($this->buildRouteName($path));
         $route->setStaticPrefix($path);
-        $route->setName($this->buildRouteName($route));
         $route->setPath($path);
 
         $node->setPath($path);
@@ -184,9 +183,9 @@ class RouteBuilder
         return $route;
     }
 
-    public function buildRouteName(Route $route)
+    public function buildRouteName($path)
     {
-        $newPathName = str_replace(['/', '-', '.'], '_', ltrim($route->getPath(), '/'));
+        $newPathName = str_replace(['/', '-', '.'], '_', trim($path, '/'));
 
         return 'gravity_node_' . $newPathName;
     }

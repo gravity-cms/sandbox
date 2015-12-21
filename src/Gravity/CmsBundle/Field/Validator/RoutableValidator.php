@@ -68,7 +68,7 @@ class RoutableValidator extends ConstraintValidator
         // If we've been given a custom path, then don't use nonConflict in route path generation
         $hasCustomPath = strlen($value->getPath());
         $route         = $this->routeBuilder->build($value, !$hasCustomPath);
-        $routeName     = $this->routeBuilder->buildRouteName($route);
+        $routeName     = $this->routeBuilder->buildRouteName($route->getPath());
 
         if (is_array($originalData) && count($originalData)) {
             if ($originalData['path'] !== $value->getPath()) {
