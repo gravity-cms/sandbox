@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <serializer>
     <class name="Gravity\CmsBundle\Entity\User" exclusion-policy="all">
+        <xml-namespace prefix="atom" uri="http://www.w3.org/2005/Atom"/>
         <property name="id" type="integer" expose="true" />
-        <discriminator-class value="type">Sonata\UserBundle\Entity\User</discriminator-class>
     </class>
 </serializer>

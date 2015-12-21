@@ -52,6 +52,7 @@ assetic:
       - GravityAdminBundle
       - GravityCmsBundle
     #java: /usr/bin/java
+    ruby: /usr/local/bin/ruby
     filters:
         cssrewrite: ~
         uglifyjs2:
