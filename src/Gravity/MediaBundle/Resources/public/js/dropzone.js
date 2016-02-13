@@ -68,12 +68,6 @@
                         previewTemplate: options.template
                     });
 
-                    dz.on('sending', function(file, xhr, formData){
-                        formData.append('enabled', 1);
-                        formData.append('name', file.name);
-                        formData.append('context', 'default');
-                    });
-
                     // dropzone doesn't bind the delete buttons if they were present before init (e.g. on edit pages)
                     $dropzone.find('.file-remove').on('click', function () {
                         $(this).closest('.file-tile').remove();

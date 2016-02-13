@@ -3,6 +3,7 @@
 
 namespace Gravity\MediaBundle\Serializer\EventDispatcher;
 
+use Gravity\CmsBundle\Serializer\NodeExclusionStrategy;
 use Gravity\MediaBundle\Entity\Media;
 use JMS\Serializer\EventDispatcher\Events;
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
@@ -54,6 +55,7 @@ class MediaEventSubscriber implements EventSubscriberInterface
     {
         $visitor = $event->getVisitor();
         $object  = $event->getObject();
+        $context = $event->getContext();
         if ($object instanceof Media) {
             $styles = [];
 
@@ -65,6 +67,7 @@ class MediaEventSubscriber implements EventSubscriberInterface
                 }
             }
 
+            $visitor->addData('src',    $provider->generatePublicUrl($object, 'reference'));
             $visitor->addData('styles', $styles);
         }
     }

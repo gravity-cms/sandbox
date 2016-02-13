@@ -26,6 +26,7 @@ class SonataMediaWidgetForm extends AbstractType
                 'media',
                 'sonata_media_type',
                 [
+                    'context'    => $options['field_options']['provider_context'],
                     'provider'   => $options['field_options']['provider'],
                     'data_class' => $options['field_options']['entity'],
                     'required' => false,
