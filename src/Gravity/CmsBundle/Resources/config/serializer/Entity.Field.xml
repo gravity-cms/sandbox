@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <serializer>
     <class name="Gravity\CmsBundle\Entity\Field" exclusion-policy="all">
+        <property name="id" type="integer" expose="false" groups="gravity_api_read" />
     </class>
 </serializer>

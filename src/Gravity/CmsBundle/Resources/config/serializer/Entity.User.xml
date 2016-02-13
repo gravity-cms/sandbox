@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <serializer>
     <class name="Gravity\CmsBundle\Entity\User" exclusion-policy="all">
-        <xml-namespace prefix="atom" uri="http://www.w3.org/2005/Atom"/>
-        <property name="id" type="integer" expose="true" />
+        <property name="id"                  type="integer"  expose="true" groups="gravity_api_read" />
+        <property name="username"            type="string"   expose="true" groups="gravity_api_read" />
+        <property name="usernameCanonical"   type="string"   expose="true" groups="gravity_api_read" />
+        <property name="email"               type="string"   expose="true" groups="gravity_api_read" />
+        <property name="emailCanonical"      type="string"   expose="true" groups="gravity_api_read" />
+        <property name="enabled"             type="boolean"  expose="true" groups="gravity_api_read" />
     </class>
 </serializer>

@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <serializer>
     <class name="Gravity\CmsBundle\Entity\Node" exclusion-policy="all">
+        <property name="id" expose="true" groups="gravity_api_read" />
+        <property name="title" expose="true" groups="gravity_api_read" />
+        <property name="path" type="string" expose="true" groups="gravity_api_read" />
+        <property name="published" type="boolean" expose="true" groups="gravity_api_read" />
+        <property name="publishedFrom" type="DateTime" expose="true" groups="gravity_api_read" />
+        <property name="publishedTo" type="DateTime" expose="true" groups="gravity_api_read" />
+        <property name="publishedBy" type="Gravity\CmsBundle\Entity\User" expose="true" groups="gravity_api_read" />
         <property name="route" expose="false" />
     </class>
 </serializer>

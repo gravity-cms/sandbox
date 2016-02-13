@@ -107,6 +107,16 @@ class FieldManager
     /**
      * @param $class
      *
+     * @return boolean
+     */
+    public function hasEntityFieldMapping($class)
+    {
+        return isset($this->entityFieldMappings[$class]);
+    }
+
+    /**
+     * @param $class
+     *
      * @return array
      */
     public function getEntityFieldMapping($class)

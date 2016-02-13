@@ -4,7 +4,10 @@
 namespace Gravity\CmsBundle\Controller;
 
 use FOS\RestBundle\View\View;
-use Gravity\CmsBundle\Entity\Node;
+use Gravity\CmsBundle\Serializer\NodeExclusionStrategy;
+use JMS\Serializer\Exclusion\DisjunctExclusionStrategy;
+use JMS\Serializer\Exclusion\GroupsExclusionStrategy;
+use JMS\Serializer\Exclusion\VersionExclusionStrategy;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -31,9 +34,19 @@ class NodeController extends Controller
             throw $this->createNotFoundException("Node '{$nodeId}' not found for type '{$type}'");
         }
 
-        $view = View::create($node);
+        $fieldManager = $this->get('gravity_cms.field_manager');
+
+        $view    = View::create($node);
         $context = $view->getSerializationContext();
-        $context->setGroups(['gravity_api_read']);
+        $exclusionStrategyChain = new DisjunctExclusionStrategy(
+            [
+                new GroupsExclusionStrategy(['gravity_api_read']),
+                new VersionExclusionStrategy('1.0'),
+            ]
+        );
+        $context->addExclusionStrategy(new NodeExclusionStrategy($fieldManager, $exclusionStrategyChain));
+        $context->setSerializeNull(true);
+
         return $this->get('fos_rest.view_handler')->handle($view, $request);
     }
 
@@ -48,8 +61,12 @@ class NodeController extends Controller
             ]
         );
 
-        return $this->redirectToRoute($node->getRoute()->getName(), [
-            '_format' => $request->get('_format')
-        ], 301);
+        return $this->redirectToRoute(
+            $node->getRoute()->getName(),
+            [
+                '_format' => $request->get('_format')
+            ],
+            301
+        );
     }
 }
