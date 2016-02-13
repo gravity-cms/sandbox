@@ -11,6 +11,7 @@
 /bin/
 /composer.phar
 
+composer.lock
 .bundle
 .idea
 node_modules
