@@ -3,6 +3,7 @@ imports:
     - { resource: security.yml }
     - { resource: services.yml }
 
+    - { resource: sonata/admin.yml }
     - { resource: sonata/formatter.yml }
     - { resource: sonata/user.yml }
     - { resource: sonata/media.yml }
