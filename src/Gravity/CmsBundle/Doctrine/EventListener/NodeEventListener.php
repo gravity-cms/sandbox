@@ -262,7 +262,9 @@ class NodeEventListener implements EventSubscriber
      */
     protected function deletedRoute(Route $route)
     {
-        return $this->redirectRoute($route, '');
+        $route->setDefault('_controller', 'FrameworkBundle:Redirect:redirect');
+        $route->setDefault('path', '');
+        $route->setDefault('permanent', true);
     }
 
     /**

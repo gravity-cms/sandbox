@@ -12,5 +12,6 @@ class GravityCmsBundle extends Bundle
     {
         $container->addCompilerPass(new Compilers\FieldCompilerPass());
         $container->addCompilerPass(new Compilers\SearchCompilerPass());
+        $container->addCompilerPass(new Compilers\RoutingCompilerPass());
     }
 }

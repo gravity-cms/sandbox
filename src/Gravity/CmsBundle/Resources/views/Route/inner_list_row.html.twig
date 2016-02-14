@@ -1,0 +1,21 @@
+{% extends 'SonataAdminBundle:CRUD:base_list_flat_inner_row.html.twig' %}
+
+{% block row %}
+    {% if object.variablePattern %}
+        {{ absolute_url(object.staticPrefix) }}{{ object.staticPrefix }}
+    {% else %}
+        <a href="{{ absolute_url(object.staticPrefix) }}">{{ object.staticPrefix }}</a>
+    {% endif %}
+    ~ <em class="text-muted">{{ object|render_list_element(admin.list['name']) }}</em>
+    {# you can use fields defined in the the Admin class #}
+
+    {#{{ object|render_list_element(admin.list['name']) }} -#}
+    {#{{ object|render_list_element(admin.list['url']) }} -#}
+    {#{{ object|render_list_element(admin.list['email']) }} <br />#}
+
+    {#<small>#}
+        {# or you can use the object variable to render a property #}
+        {#{{ object.message }}#}
+    {#</small>#}
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'SonataAdminBundle:CRUD:action.html.twig' %}
+
+{% block title %}{{ 'title_select_route_type'|trans({}, 'GravityCmsBundle') }}{% endblock %}
+
+{% block content %}
+    <div class="box box-success">
+        <div class="box-header">
+            <h3 class="box-title">
+                {{ block('title') }}
+            </h3>
+        </div>
+        <div class="box-body">
+            {% for name, route_type in route_types %}
+                <a href="{{ admin.generateUrl('create', {'route_type': name}) }}"
+                   class="btn btn-app"
+                   data-toggle="tooltip"
+                   data-placement="top"
+                >
+                    {{ name|trans({}, 'GravityCmsBundle') }}
+                </a>
+            {% else %}
+                <span class="alert alert-info">{{ 'no_route_type_available'|trans({}, 'GravityCmsBundle') }}</span>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

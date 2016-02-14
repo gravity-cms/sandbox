@@ -1,0 +1,60 @@
+services:
+
+  gravity_cms.admin.route:
+    class: Gravity\CmsBundle\Admin\RouteAdmin
+    arguments: [~, Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route, GravityCmsBundle:Admin/Route]
+    tags:
+      - {name: sonata.admin, manager_type: orm, group: System, label: Routing}
+    calls:
+      - ['setTemplate', ['inner_list_row', 'GravityCmsBundle:Route:inner_list_row.html.twig']]
+      - ['setTemplate', ['base_list_field', 'SonataAdminBundle:CRUD:base_list_flat_field.html.twig']]
+      - ['setRouteTypePool', [@gravity_cms.routing.type_pool]]
+
+  gravity_cms.routing.node_route_manager:
+    class: Gravity\CmsBundle\Routing\NodeRouteManager
+    arguments:
+      - @router
+
+  gravity_cms.routing.node_route_builder:
+    class: Gravity\CmsBundle\Routing\RouteBuilder
+    arguments:
+      - @gravity_cms.routing.node_route_manager
+      - @gravity_cms.routing.slugger
+      - @gravity_cms.field_manager
+
+  gravity_cms.routing.slugger:
+    class: Cocur\Slugify\Slugify
+
+  #
+  # form
+  gravity_cms.form.type.basic_route:
+    class: Gravity\CmsBundle\Form\Type\BasicRouteType
+    tags:
+      - { name: form.type, alias: basic_route }
+
+  #
+  # Node validators
+  validator.routable:
+    class: Gravity\CmsBundle\Field\Validator\RoutableValidator
+    arguments:
+      - @doctrine.orm.default_entity_manager
+      - @gravity_cms.routing.node_route_manager
+      - @gravity_cms.routing.node_route_builder
+    tags:
+      - { name: validator.constraint_validator, alias: routable }
+
+  #
+  # Admin Route Types
+  gravity_cms.routing.type_pool:
+    class: Gravity\CmsBundle\Routing\Type\RouteTypePool
+
+  gravity_cms.routing.type.redirect:
+    class: Gravity\CmsBundle\Routing\Type\RedirectType
+    tags:
+      - { name: 'gravity_cms.route_type', label: 'redirect' }
+
+  gravity_cms.routing.type.delete:
+    class: Gravity\CmsBundle\Routing\Type\DeletedType
+    tags:
+      - { name: 'gravity_cms.route_type', label: 'deleted' }
+

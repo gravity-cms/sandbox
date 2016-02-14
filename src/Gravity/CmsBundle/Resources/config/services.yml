@@ -1,6 +1,7 @@
 imports:
   - { resource: services/admin.yml }
   - { resource: services/search.yml }
+  - { resource: services/routing.yml }
   - { resource: services/field.yml }
   - { resource: services/field_text.yml }
   - { resource: services/field_number.yml }
@@ -20,28 +21,16 @@ services:
     tags:
       - { name: doctrine.event_subscriber }
 
-  gravity_cms.routing.node_route_manager:
-    class: Gravity\CmsBundle\Routing\NodeRouteManager
-    arguments:
-      - @router
-
-  gravity_cms.routing.node_route_builder:
-    class: Gravity\CmsBundle\Routing\RouteBuilder
-    arguments:
-      - @gravity_cms.routing.node_route_manager
-      - @gravity_cms.routing.slugger
-      - @gravity_cms.field_manager
-
-  gravity_cms.routing.slugger:
-    class: Cocur\Slugify\Slugify
+  # Revision Listener
+  #gravity_node.doctrine.revision_listener:
+  #  class: Gravity\CmsBundle\Doctrine\EventListener\RevisionEventListener
+  #  arguments:
+  #    - @gravity_cms.field_manager
+  #  tags:
+  #    - { name: doctrine.event_subscriber }
 
   #
   # form
-  gravity_cms.form.type.basic_route:
-    class: Gravity\CmsBundle\Form\Type\BasicRouteType
-    tags:
-      - { name: form.type, alias: basic_route }
-
   gravity_cms.form.type.autocomplete:
     class: Gravity\CmsBundle\Form\Type\AutoCompleteType
     arguments:
@@ -56,14 +45,3 @@ services:
       - @doctrine.orm.default_entity_manager
     tags:
       - { name: form.type, alias: hidden_entity }
-
-  #
-  # Node validators
-  validator.routable:
-    class: Gravity\CmsBundle\Field\Validator\RoutableValidator
-    arguments:
-      - @doctrine.orm.default_entity_manager
-      - @gravity_cms.routing.node_route_manager
-      - @gravity_cms.routing.node_route_builder
-    tags:
-      - { name: validator.constraint_validator, alias: routable }

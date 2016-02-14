@@ -123,7 +123,7 @@ class NodeAdmin extends AbstractFieldableAdmin
     {
         $listMapper
             ->addIdentifier('title')
-            ->add('path')
+            ->add('path', 'url')
             ->add('published')
             ->add('publishedFrom')
             ->add('publishedTo')
