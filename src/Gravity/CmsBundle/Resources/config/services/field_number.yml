@@ -10,3 +10,8 @@ services:
     class: Gravity\CmsBundle\Field\Type\Number\Widget\NumberBox\NumberBoxWidget
     tags:
       - { name: gravity_cms.field.widget }
+
+  gravity_cms.field.number.display.number:
+    class: Gravity\CmsBundle\Field\Type\Number\Display\NumberDisplay
+    tags:
+      - { name: gravity_cms.field.display }

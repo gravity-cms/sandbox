@@ -20,3 +20,13 @@ services:
     class: Gravity\CmsBundle\Field\Type\Text\Widget\UnFormatted\UnFormattedWidget
     tags:
       - { name: gravity_cms.field.widget }
+
+  gravity_cms.field.text.display.text:
+    class: Gravity\CmsBundle\Field\Type\Text\Display\Formatted\FormattedDisplay
+    tags:
+      - { name: gravity_cms.field.display }
+
+  gravity_cms.field.text.display.url:
+    class: Gravity\CmsBundle\Field\Type\Text\Display\Url\UrlDisplay
+    tags:
+      - { name: gravity_cms.field.display }

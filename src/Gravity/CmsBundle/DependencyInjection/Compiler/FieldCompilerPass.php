@@ -5,6 +5,7 @@ namespace Gravity\CmsBundle\DependencyInjection\Compiler;
 
 use Gravity\CmsBundle\DependencyInjection\Gravity\NodeConfiguration;
 use Gravity\CmsBundle\Field\FieldDefinitionInterface;
+use Gravity\CmsBundle\Field\FieldDisplayDefinitionInterface;
 use Gravity\CmsBundle\Field\FieldWidgetDefinitionInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -37,8 +38,9 @@ class FieldCompilerPass implements CompilerPassInterface
         $assetManagerDefinition     = $container->findDefinition('assetic.asset_manager');
 
         // build a set of instances of the field definitions so we can pre-process resolve all the field's options
-        $fieldDefinitions       = [];
-        $fieldWidgetDefinitions = [];
+        $fieldDefinitions        = [];
+        $fieldWidgetDefinitions  = [];
+        $fieldDisplayDefinitions = [];
 
         // field definitions
         $fieldTags = $container->findTaggedServiceIds('gravity_cms.field');
@@ -76,6 +78,28 @@ class FieldCompilerPass implements CompilerPassInterface
 
             // TODO: add all widgets into a assetic formula
             foreach($fieldWidgetDefinition->getAssetLibraries() as $library) {
+                $stylesheets = array_merge($stylesheets, $library->getStylesheets());
+            }
+        }
+
+        // field display definitions
+        $fieldDisplayTags = $container->findTaggedServiceIds('gravity_cms.field.display');
+        foreach ($fieldDisplayTags as $sid => $tags) {
+            $fieldManagerDefinition->addMethodCall(
+                'addFieldDisplayDefinition',
+                [
+                    new Reference($sid)
+                ]
+            );
+
+            $fieldDisplayDefinitionDefinition = $container->findDefinition($sid);
+            $fieldDisplayDefinitionClass      = $fieldDisplayDefinitionDefinition->getClass();
+            /** @var FieldDisplayDefinitionInterface $fieldDisplayDefinition */
+            $fieldDisplayDefinition                                     = new $fieldDisplayDefinitionClass();
+            $fieldDisplayDefinitions[$fieldDisplayDefinition->getName()] = $fieldDisplayDefinition;
+
+            // TODO: add all widgets into a assetic formula
+            foreach($fieldDisplayDefinition->getAssetLibraries() as $library) {
                 $stylesheets = array_merge($stylesheets, $library->getStylesheets());
             }
         }
@@ -159,6 +183,14 @@ class FieldCompilerPass implements CompilerPassInterface
                     $fieldWidgetDefinitions[$options['widget']['type']],
                     $options['widget']['options']
                 );
+
+                if($options['display']['type']) {
+                    $options['display']['options'] = $this->resolveFieldDisplayOptions(
+                        $fieldDisplayDefinitions[$options['display']['type']],
+                        $options['display']['options']
+                    );
+                }
+
                 $fieldMappings[$nodeClass][$name] = $options;
             }
 
@@ -185,6 +217,12 @@ class FieldCompilerPass implements CompilerPassInterface
 //        $container->setParameter('sonata.admin.configuration.dashboard_groups', $dashboardGroups);
     }
 
+    /**
+     * @param FieldDefinitionInterface $fieldDefinition
+     * @param array                    $options
+     *
+     * @return array
+     */
     protected function resolveFieldOptions(FieldDefinitionInterface $fieldDefinition, array $options)
     {
         $resolver = new OptionsResolver();
@@ -201,6 +239,12 @@ class FieldCompilerPass implements CompilerPassInterface
         return $resolver->resolve($options);
     }
 
+    /**
+     * @param FieldWidgetDefinitionInterface $fieldWidgetDefinition
+     * @param array                          $options
+     *
+     * @return array
+     */
     protected function resolveFieldWidgetOptions(FieldWidgetDefinitionInterface $fieldWidgetDefinition, array $options)
     {
         $resolver = new OptionsResolver();
@@ -214,4 +258,22 @@ class FieldCompilerPass implements CompilerPassInterface
         return $resolver->resolve($options);
     }
 
+    /**
+     * @param FieldDisplayDefinitionInterface $fieldDisplayDefinition
+     * @param array                           $options
+     *
+     * @return array
+     */
+    protected function resolveFieldDisplayOptions(FieldDisplayDefinitionInterface $fieldDisplayDefinition, array $options)
+    {
+        $resolver = new OptionsResolver();
+        $resolver->setDefaults(
+            [
+                'default' => null,
+            ]
+        );
+        $fieldDisplayDefinition->setOptions($resolver, $options);
+
+        return $resolver->resolve($options);
+    }
 }

@@ -34,20 +34,42 @@ class NodeController extends Controller
             throw $this->createNotFoundException("Node '{$nodeId}' not found for type '{$type}'");
         }
 
-        $fieldManager = $this->get('gravity_cms.field_manager');
+        $format = $request->attributes->get('_format', 'html');
 
-        $view    = View::create($node);
-        $context = $view->getSerializationContext();
-        $exclusionStrategyChain = new DisjunctExclusionStrategy(
-            [
-                new GroupsExclusionStrategy(['gravity_api_read']),
-                new VersionExclusionStrategy('1.0'),
-            ]
-        );
-        $context->addExclusionStrategy(new NodeExclusionStrategy($fieldManager, $exclusionStrategyChain));
-        $context->setSerializeNull(true);
+        if ($format === 'html') {
+            $fieldManager  = $this->get('gravity_cms.field_manager');
+            $fieldMappings = $fieldManager->getEntityFieldMapping(get_class($node));
 
-        return $this->get('fos_rest.view_handler')->handle($view, $request);
+//            foreach ($fieldMappings as $field => $settings) {
+//                $fieldDefinition = $fieldManager->getFieldDefinition($settings['type']);
+//                if ($settings['display']['type']) {
+//                    $fieldDisplayDefinition = $fieldManager->getFieldDisplayDefinition($settings['display']['type']);
+//                }
+//            }
+
+            return $this->render(
+                'GravityCmsBundle:Node:view.html.twig',
+                [
+                    'node'           => $node,
+                    'field_mappings' => $fieldMappings,
+                ]
+            );
+        } else {
+            $fieldManager = $this->get('gravity_cms.field_manager');
+
+            $view                   = View::create($node);
+            $context                = $view->getSerializationContext();
+            $exclusionStrategyChain = new DisjunctExclusionStrategy(
+                [
+                    new GroupsExclusionStrategy(['gravity_api_read']),
+                    new VersionExclusionStrategy('1.0'),
+                ]
+            );
+            $context->addExclusionStrategy(new NodeExclusionStrategy($fieldManager, $exclusionStrategyChain));
+            $context->setSerializeNull(true);
+
+            return $this->get('fos_rest.view_handler')->handle($view, $request);
+        }
     }
 
     public function redirectAction(Request $request, $type, $nodeId)

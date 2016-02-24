@@ -8,8 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Class FieldManager
  *
- * @package Gravity\CmsBundle\Field
- * @author  Andy Thorne <contrabandvr@gmail.com>
+ * @author Andy Thorne <contrabandvr@gmail.com>
  */
 class FieldManager
 {
@@ -22,6 +21,11 @@ class FieldManager
      * @var FieldWidgetDefinitionInterface[]
      */
     protected $fieldWidgetDefinitions = [];
+
+    /**
+     * @var FieldDisplayDefinitionInterface[]
+     */
+    protected $fieldDisplayDefinitions = [];
 
     /**
      * @var array
@@ -94,6 +98,40 @@ class FieldManager
     public function addFieldWidgetDefinition(FieldWidgetDefinitionInterface $fieldWidgetDefinition)
     {
         $this->fieldWidgetDefinitions[$fieldWidgetDefinition->getName()] = $fieldWidgetDefinition;
+    }
+
+    /**
+     * @return FieldDisplayDefinitionInterface[]
+     */
+    public function getFieldDisplayDefinitions()
+    {
+        return $this->fieldDisplayDefinitions;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return FieldDisplayDefinitionInterface
+     */
+    public function getFieldDisplayDefinition($name)
+    {
+        return $this->fieldDisplayDefinitions[$name];
+    }
+
+    /**
+     * @param FieldDisplayDefinitionInterface[] $fieldDisplayDefinitions
+     */
+    public function setFieldDisplayDefinitions($fieldDisplayDefinitions)
+    {
+        $this->fieldDisplayDefinitions = $fieldDisplayDefinitions;
+    }
+
+    /**
+     * @param FieldDisplayDefinitionInterface $fieldDisplayDefinition
+     */
+    public function addFieldDisplayDefinition(FieldDisplayDefinitionInterface $fieldDisplayDefinition)
+    {
+        $this->fieldDisplayDefinitions[$fieldDisplayDefinition->getName()] = $fieldDisplayDefinition;
     }
 
     /**

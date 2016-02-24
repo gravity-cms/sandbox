@@ -22,6 +22,11 @@ services:
     tags:
       - { name: gravity_cms.field.widget }
 
+  gravity_cms.field.reference.display.media_sonata:
+    class: Gravity\MediaBundle\Field\Type\Reference\Display\SonataMediaDisplay
+    tags:
+      - { name: gravity_cms.field.display }
+
 
   gravity_cms.serializer.event_subscriber.meida:
     class: Gravity\MediaBundle\Serializer\EventDispatcher\MediaEventSubscriber

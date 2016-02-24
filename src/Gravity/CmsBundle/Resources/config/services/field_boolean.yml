@@ -14,3 +14,8 @@ services:
 #    class: Gravity\CmsBundle\Field\Type\Choice\Widget\Select\SelectWidget
 #    tags:
 #      - { name: gravity_cms.field.widget }
+
+  gravity_cms.field.boolean.display.boolean:
+    class: Gravity\CmsBundle\Field\Type\Boolean\Display\BooleanDisplay
+    tags:
+      - { name: gravity_cms.field.display }

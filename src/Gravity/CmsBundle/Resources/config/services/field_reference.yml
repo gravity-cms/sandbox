@@ -19,3 +19,11 @@ services:
     class: Gravity\CmsBundle\Field\Type\Reference\EventDispatcher\ReferenceFieldEventMappingSubscriber
     tags:
       - { name: kernel.event_subscriber }
+
+
+  gravity_cms.field.reference.display.link:
+    class: Gravity\CmsBundle\Field\Type\Reference\Display\Link\LinkDisplay
+    calls:
+      - ['setRouter', [@router]]
+    tags:
+      - { name: gravity_cms.field.display }

@@ -1,0 +1,12 @@
+{% spaceless %}
+    {% if label %}
+        {% if label_inline %}
+            <span>{{ label }}</span>
+        {% else %}
+            <div>{{ label }}</div>
+        {% endif %}
+    {% endif %}
+    <div>
+        {{ value }}
+    </div>
+{% endspaceless %}

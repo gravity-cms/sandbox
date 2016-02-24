@@ -1,0 +1,6 @@
+{% extends 'GravityCmsBundle:Field:field.html.twig' %}
+
+{% block field %}
+    {% set media_options = media_options|default({}) %}
+    {% media image, image_style with media_options %}
+{% endblock field %}

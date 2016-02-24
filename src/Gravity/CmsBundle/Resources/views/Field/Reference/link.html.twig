@@ -1,0 +1,7 @@
+{% extends 'GravityCmsBundle:Field:field.html.twig' %}
+
+{% block field %}
+    {% if url|default(false) %}
+        <a href="{{ url }}"{% if follow %} rel="nofollow"{% endif %}{% if new_tab %} target="_blank"{% endif %}>{{ text }}</a>
+    {% endif %}
+{% endblock field %}
