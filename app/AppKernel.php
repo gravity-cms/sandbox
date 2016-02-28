@@ -47,7 +47,6 @@ class AppKernel extends Kernel
 
             // Gravity Admin
             new Gravity\AdminBundle\GravityAdminBundle('SonataAdminBundle'),
-            new Hearsay\RequireJSBundle\HearsayRequireJSBundle(),
 
             // Routing
             new Symfony\Cmf\Bundle\RoutingBundle\CmfRoutingBundle(),

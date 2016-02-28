@@ -1,18 +1,4 @@
-define(['jquery', 'bootstrap'], function ($, bs) {
-
-    require([
-        'moment',
-        'select2',
-        //'treeview',
-        window.rbundle('sonataadmin/vendor/jqueryui/ui/minified/i18n/jquery-ui-i18n.min'),
-        window.rbundle('sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min'),
-        window.rbundle('sonataadmin/jquery/jquery.confirmExit'),
-        window.rbundle('sonataadmin/vendor/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min'),
-        //window.rbundle('sonataadmin/App'),
-    ], function () {
-        require([window.rbundle('sonataadmin/Admin')]);
-    });
-
+(function () {
     var _expanded = false,
         _this = this,
         $menu = $('#main-menu'),
@@ -383,4 +369,4 @@ define(['jquery', 'bootstrap'], function ($, bs) {
     // var init = [];
     //PixelAdmin.start(init);
 
-});
+})();

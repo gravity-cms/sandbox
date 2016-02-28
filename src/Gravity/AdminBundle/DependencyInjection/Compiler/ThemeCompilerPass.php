@@ -35,13 +35,13 @@ class ThemeCompilerPass implements CompilerPassInterface
         $themeManagerReference  = new Reference('gravity_admin.theme_manager');
 
         // the admin javascripts
-        $javascripts = $config['assets']['javascripts'];
+        $javascripts = [];
         foreach ($javascripts as $file) {
             if (strpos($file, '@') !== 0) {
                 throw new \Exception("Assets must be referenced by bundles name (e.g. @AcmeDemoBundle)");
             }
         }
-        $stylesheets = $config['assets']['stylesheets'];
+        $stylesheets = [];
         foreach ($stylesheets as $file) {
             if (strpos($file, '@') !== 0) {
                 throw new \Exception("Assets must be referenced by bundles name (e.g. @AcmeDemoBundle)");

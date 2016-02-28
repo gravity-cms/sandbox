@@ -66,13 +66,10 @@
     <!-- END STYLESHEETS -->
 
     <!-- START JAVASCRIPTS -->
-    <script type="text/javascript">
-        window.GRAVITY = {};
-    </script>
-
-
     {% block javascripts %}
         <script>
+            window.GRAVITY = {};
+
             window.SONATA_CONFIG = {
                 CONFIRM_EXIT: {% if admin_pool is defined and admin_pool.getOption('confirm_exit') %}true{% else %}false{% endif %},
                 USE_SELECT2: {% if admin_pool is defined and admin_pool.getOption('use_select2') %}true{% else %}false{% endif %},
@@ -98,19 +95,9 @@
         {% endif %}
         {% endif %}
 
-        {{ require_js_initialize() }}
-        <script type="text/javascript">
-            window.rbundle = function(path){
-                return '/bundles/' + path.trim() + '.js';
-            };
-            require([
-                'theme/gravity_admin/main',
-                rbundle('gravitycms/js/form/fields'),
-                {% for asset_file in require_field_assets() %}
-                    '{{ asset(asset_file) }}',
-                {% endfor %}
-            ])</script>
-
+        {% for asset_file in require_field_assets() %}
+        <script src="{{ asset(asset_file) }}"></script>
+        {% endfor %}
     {% endblock %}
 
 </head>

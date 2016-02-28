@@ -1,6 +1,6 @@
 'use strict';
 
-define(['jquery', 'jqueryui', 'bootstrap'], function ($, ui, bs) {
+window.GRAVITY.fields = (function ($) {
 
     var $form,
         widgets = {};
@@ -103,4 +103,4 @@ define(['jquery', 'jqueryui', 'bootstrap'], function ($, ui, bs) {
     });
 
     return nodeForm
-});
+})(jQuery);

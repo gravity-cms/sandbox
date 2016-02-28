@@ -19,6 +19,8 @@ class GravityMediaWidgetAssetLibrary extends AbstractAssetLibrary
     public function getJavascripts()
     {
         return [
+            'bundles/gravitymedia/vendor/dropzone/dist/min/dropzone.min.js',
+            'bundles/gravitymedia/js/dropzone.js',
             'bundles/gravitymedia/js/field/gravity-media.js',
         ];
     }

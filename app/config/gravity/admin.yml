@@ -13,7 +13,30 @@ sonata_admin:
         use_icheck: false
 
     assets:
-        javascripts: []
+        javascripts:
+            - bundles/sonataadmin/vendor/jquery/dist/jquery.min.js
+            - bundles/sonataadmin/vendor/jquery.scrollTo/jquery.scrollTo.min.js
+        
+            - bundles/sonatacore/vendor/moment/min/moment.min.js
+        
+            - bundles/sonataadmin/vendor/bootstrap/dist/js/bootstrap.min.js
+        
+            - bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js
+        
+            - bundles/sonataadmin/vendor/jqueryui/ui/minified/jquery-ui.min.js
+            - bundles/sonataadmin/vendor/jqueryui/ui/minified/i18n/jquery-ui-i18n.min.js
+        
+            - bundles/sonataadmin/jquery/jquery.form.js
+            - bundles/sonataadmin/jquery/jquery.confirmExit.js
+        
+            - bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js
+        
+            - bundles/sonataadmin/vendor/select2/select2.min.js
+        
+            - bundles/sonataadmin/App.js
+            - bundles/sonataadmin/Admin.js
+
+            - bundles/gravitycms/js/form/fields.js
         stylesheets: []
 
 cmf_routing:
@@ -31,45 +54,6 @@ cmf_routing:
 assetic:
     bundles:
       - GravityAdminBundle
-
-hearsay_require_js:
-    base_url: /js
-    base_dir: %kernel.root_dir%/../node_modules/requirejs/bin/
-    paths:
-        jquery:
-            location: ../bundles/sonataadmin/vendor/jquery/dist/jquery.min
-            external: true
-        jqueryui:
-            location: ../bundles/sonataadmin/vendor/jqueryui/ui/minified/jquery-ui.min
-            external: true
-        bootstrap:
-            location: ../bundles/sonatacore/vendor/bootstrap/dist/js/bootstrap.min
-            external: true
-        select2:
-            location: ../bundles/sonatacore/vendor/select2/select2.min
-            external: true
-        treeview:
-            location: ../bundles/sonataadmin/treeview
-            external: true
-        moment:
-            location: ../bundles/sonatacore/vendor/moment/min/moment.min
-            external: true
-        xeditable:
-            location: ../bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min
-            external: true
-
-    shim:
-        bootstrap:
-            deps: [jquery]
-            exports: Bootstrap
-        jqueryui:
-            deps: [jquery]
-            exports: jQuery
-        select2:
-            deps: [jquery, bootstrap]
-            exports: Select2
-        treeview:
-            deps: [jquery]
 
 fos_rest:
     param_fetcher_listener: true

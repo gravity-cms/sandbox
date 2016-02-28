@@ -16,7 +16,12 @@ class FormattedWidgetAssetLibrary extends AbstractAssetLibrary
     public function getJavascripts()
     {
         return [
-            'bundles/gravitycms/js/field/text/text.js'
+            'bundles/ivoryckeditor/ckeditor.js',
+            'bundles/sonataformatter/vendor/markitup-markitup/markitup/jquery.markitup.js',
+            'bundles/sonataformatter/markitup/sets/html/set.js',
+            'bundles/sonataformatter/markitup/sets/textile/set.js',
+            'bundles/sonataformatter/markitup/sets/markdown/set.js',
+            'bundles/gravitycms/js/field/text/text.js',
         ];
     }
 }

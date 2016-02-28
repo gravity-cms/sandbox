@@ -1,4 +1,4 @@
-define(['jquery', 'datatables'], function ($, dt) {
+(function ($) {
     $.extend( true, $.fn.dataTable.defaults, {
         "sDom":
         "<'table-header clearfix'<'table-caption'><'DT-lf-right'<'DT-per-page'l><'DT-search'f>>r>"+
@@ -250,4 +250,4 @@ define(['jquery', 'datatables'], function ($, dt) {
             }
         } );
     }
-});
+})(jQuery);
