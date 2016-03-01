@@ -3,12 +3,9 @@
 
 namespace Gravity\MediaBundle\Field\Type\Reference\Display;
 
-use Gravity\CmsBundle\Field\AbstractFieldDisplayDefinition;
+use Gravity\CmsBundle\Display\Type\AbstractDisplayDefinition;
 use Gravity\CmsBundle\Field\FieldDefinitionInterface;
-use Gravity\MediaBundle\Entity\FieldMedia;
 use Gravity\MediaBundle\Field\Type\Reference\MediaField;
-use Sonata\MediaBundle\Provider\Pool;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -16,7 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author Andy Thorne <contrabandvr@gmail.com>
  */
-class SonataMediaDisplay extends AbstractFieldDisplayDefinition
+class SonataMediaDisplay extends AbstractDisplayDefinition
 {
     /**
      * @inheritDoc
@@ -56,8 +53,8 @@ class SonataMediaDisplay extends AbstractFieldDisplayDefinition
     public function getTemplateOptions($entity, array $options)
     {
         return [
-            'image'       => $entity->getMedia(),
-            'image_style' => $options['image_style'],
+            'image'         => $entity->getMedia(),
+            'image_style'   => $options['image_style'],
             'media_options' => [
                 'title' => $entity->getTitle(),
                 'alt'   => $entity->getAlt(),

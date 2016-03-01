@@ -34,18 +34,23 @@ class NodeController extends Controller
             throw $this->createNotFoundException("Node '{$nodeId}' not found for type '{$type}'");
         }
 
+        $displayHandlerManager = $this->get('gravity_cms.display_manager');
+
+        $handler = $displayHandlerManager->getHandlerForNode($node);
+
+        if ($handler->supportsRequest($request)) {
+            return $this->render(
+                $handler->getTemplate(),
+                $handler->getTemplateOptions($node, $displayHandlerManager->getHandlerOptions($handler, $node))
+            );
+        } else {
+            throw new \RuntimeException('Unknown Request Format');
+        }
+
         $format = $request->attributes->get('_format', 'html');
 
         if ($format === 'html') {
-            $fieldManager  = $this->get('gravity_cms.field_manager');
             $fieldMappings = $fieldManager->getEntityFieldMapping(get_class($node));
-
-//            foreach ($fieldMappings as $field => $settings) {
-//                $fieldDefinition = $fieldManager->getFieldDefinition($settings['type']);
-//                if ($settings['display']['type']) {
-//                    $fieldDisplayDefinition = $fieldManager->getFieldDisplayDefinition($settings['display']['type']);
-//                }
-//            }
 
             return $this->render(
                 'GravityCmsBundle:Node:view.html.twig',

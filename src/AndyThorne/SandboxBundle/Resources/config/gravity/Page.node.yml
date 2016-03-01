@@ -5,6 +5,52 @@ routing:
 search:
   handler: Gravity\CmsBundle\Search\Handler\NodeHandler
 
+display:
+  handler: field
+  options:
+    fields:
+      title: ~
+      leadImage:
+        type: media.sonata
+        options:
+          image_style: large
+      category:
+        type: taxonomy_list
+      tags:
+        type: taxonomy_list
+        options: ~
+      body:
+        type: text.formatted
+        label: false
+        options: ~
+      video:
+        type: media.sonata
+        label: false
+        options:
+          image_style: large
+      rating:
+        type: number
+        options: ~
+      galleryImages:
+        type: media.sonata
+        options:
+          image_style: big
+      urls:
+        type: text.url
+        options:
+          new_tab: true
+          follow: false
+      signedOff:
+        type: boolean
+        options:
+          true_value: Yes
+          false_value: No
+      parent:
+        type: reference.link
+        options:
+          new_tab: false
+          follow: true
+
 fields:
   category:
     type: reference
@@ -14,9 +60,6 @@ fields:
       entity: AndyThorne\SandboxBundle\Entity\Category
     widget:
       type: select
-      options: ~
-    display:
-      type: taxonomy_list
       options: ~
 
   tags:
@@ -30,9 +73,6 @@ fields:
       options:
         handler: taxonomy
         allow_new: true
-    display:
-      type: taxonomy_list
-      options: ~
 
   leadImage:
     type: media
@@ -46,11 +86,6 @@ fields:
       type: gravity.media
       options:
         image_preview: big
-    display:
-      type: media.sonata
-      options:
-        image_style: large
-
   body:
     type: text
     dynamic: true
@@ -63,10 +98,6 @@ fields:
       type: text.formatted
       options:
         default: 'Default Text'
-    display:
-      type: text.formatted
-      label: false
-      options: ~
 
   video:
     type: media
@@ -79,11 +110,6 @@ fields:
     widget:
       type: sonata.media
       options: ~
-    display:
-      type: media.sonata
-      label: false
-      options:
-        image_style: large
 
   galleryImages:
     type: media
@@ -96,10 +122,6 @@ fields:
       type: gravity.media
       options:
         image_preview: big
-    display:
-      type: media.sonata
-      options:
-        image_style: big
 
   rating:
     type: number
@@ -111,9 +133,6 @@ fields:
       type: number.number_box
       options:
         default: 1
-    display:
-      type: number
-      options: ~
 
   urls:
     type: text
@@ -125,11 +144,6 @@ fields:
       type: text.unformatted
       options:
         type: url
-    display:
-      type: text.url
-      options:
-        new_tab: true
-        follow: false
 
   signedOff:
     type: boolean
@@ -138,11 +152,6 @@ fields:
       searchable: false
     widget:
       type: boolean.checkbox
-    display:
-      type: boolean
-      options:
-        true_value: Yes
-        false_value: No
 
   parent:
     type: reference
@@ -154,11 +163,6 @@ fields:
       type: select
       options: ~
         #expanded: true
-    display:
-      type: reference.link
-      options:
-        new_tab: false
-        follow: true
 
   #team:
   #  type: choice

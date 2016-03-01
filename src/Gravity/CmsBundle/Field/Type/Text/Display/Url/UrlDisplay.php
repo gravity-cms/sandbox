@@ -3,9 +3,9 @@
 
 namespace Gravity\CmsBundle\Field\Type\Text\Display\Url;
 
+use Gravity\CmsBundle\Display\Type\AbstractDisplayDefinition;
 use Gravity\CmsBundle\Entity\Field;
 use Gravity\CmsBundle\Entity\FieldText;
-use Gravity\CmsBundle\Field\AbstractFieldDisplayDefinition;
 use Gravity\CmsBundle\Field\FieldDefinitionInterface;
 use Gravity\CmsBundle\Field\Type\Text\TextField;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author Andy Thorne <contrabandvr@gmail.com>
  */
-class UrlDisplay extends AbstractFieldDisplayDefinition
+class UrlDisplay extends AbstractDisplayDefinition
 {
     /**
      * {@inheritDoc}

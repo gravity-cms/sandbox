@@ -1,5 +1,11 @@
-<h1>{{ node.title }}</h1>
+{% extends 'GravityCmsBundle::frontend.html.twig' %}
 
-{% for field,settings in field_mappings %}
-    {{ render_field_display(node, field) }}
-{% endfor %}
+{% block title %}{{ node.title }}{% endblock title %}
+
+{% block content %}
+    <h1>{{ node.title }}</h1>
+
+    {% for field,settings in display_mappings %}
+        {{ render_field_display(node, field) }}
+    {% endfor %}
+{% endblock content %}

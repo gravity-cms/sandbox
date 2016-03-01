@@ -3,8 +3,7 @@
 
 namespace Gravity\TagBundle\Field\Type\Reference\Display;
 
-use Gravity\CmsBundle\Entity\Field;
-use Gravity\CmsBundle\Field\AbstractFieldDisplayDefinition;
+use Gravity\CmsBundle\Display\Type\AbstractDisplayDefinition;
 use Gravity\CmsBundle\Field\FieldDefinitionInterface;
 use Gravity\CmsBundle\Field\Type\Reference\ReferenceField;
 
@@ -13,7 +12,7 @@ use Gravity\CmsBundle\Field\Type\Reference\ReferenceField;
  *
  * @author Andy Thorne <contrabandvr@gmail.com>
  */
-class TaxonomyListDisplay extends AbstractFieldDisplayDefinition
+class TaxonomyListDisplay extends AbstractDisplayDefinition
 {
     /**
      * @inheritDoc

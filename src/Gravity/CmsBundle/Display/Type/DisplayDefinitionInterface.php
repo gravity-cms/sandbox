@@ -1,20 +1,20 @@
 <?php
 
 
-namespace Gravity\CmsBundle\Field;
+namespace Gravity\CmsBundle\Display\Type;
 
 use Gravity\CmsBundle\Asset\AssetLibraryInterface;
 use Gravity\CmsBundle\Entity\Field;
+use Gravity\CmsBundle\Field\FieldDefinitionInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Interface FieldDisplayDefinitionInterface
+ * Interface DisplayDefinitionInterface
  *
  * @author Andy Thorne <contrabandvr@gmail.com>
  */
-interface FieldDisplayDefinitionInterface
+interface DisplayDefinitionInterface
 {
-
     /**
      * Get the identifier name of the field widget. This must be a unique name and contain only alphanumeric,
      * underscores (_) and period (.) characters in the format field.widget.<plugin>.<type>

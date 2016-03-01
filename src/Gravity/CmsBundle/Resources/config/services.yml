@@ -2,6 +2,7 @@ imports:
   - { resource: services/admin.yml }
   - { resource: services/search.yml }
   - { resource: services/routing.yml }
+  - { resource: services/display.yml }
   - { resource: services/field.yml }
   - { resource: services/field_text.yml }
   - { resource: services/field_number.yml }

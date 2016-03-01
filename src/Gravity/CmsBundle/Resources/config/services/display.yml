@@ -1,0 +1,23 @@
+services:
+  gravity_cms.display_manager:
+    class: Gravity\CmsBundle\Display\DisplayManager
+    arguments:
+      - []
+      - []
+      - []
+
+  gravity_cms.display.handler.field:
+    class: Gravity\CmsBundle\Display\Handler\FieldHandler
+    arguments:
+      - @templating
+    tags:
+      - { name: gravity_cms.display.handler }
+
+  gravity_cms.twig.display_extension:
+    class: Gravity\CmsBundle\Display\Twig\DisplayExtension
+    arguments:
+      - @gravity_cms.display_manager
+      - @gravity_cms.field_manager
+    public: false
+    tags:
+      - { name: twig.extension }

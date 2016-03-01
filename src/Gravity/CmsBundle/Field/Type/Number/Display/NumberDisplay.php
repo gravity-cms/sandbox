@@ -3,9 +3,9 @@
 
 namespace Gravity\CmsBundle\Field\Type\Number\Display;
 
+use Gravity\CmsBundle\Display\Type\AbstractDisplayDefinition;
 use Gravity\CmsBundle\Entity\Field;
 use Gravity\CmsBundle\Entity\FieldNumber;
-use Gravity\CmsBundle\Field\AbstractFieldDisplayDefinition;
 use Gravity\CmsBundle\Field\FieldDefinitionInterface;
 use Gravity\CmsBundle\Field\Type\Number\NumberField;
 
@@ -14,7 +14,7 @@ use Gravity\CmsBundle\Field\Type\Number\NumberField;
  *
  * @author Andy Thorne <contrabandvr@gmail.com>
  */
-class NumberDisplay extends AbstractFieldDisplayDefinition
+class NumberDisplay extends AbstractDisplayDefinition
 {
     /**
      * @inheritDoc

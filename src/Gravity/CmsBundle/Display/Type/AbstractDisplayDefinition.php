@@ -1,17 +1,16 @@
 <?php
 
 
-namespace Gravity\CmsBundle\Field;
+namespace Gravity\CmsBundle\Display\Type;
 
-use Gravity\CmsBundle\Entity\Field;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class AbstractFieldDisplayDefinition
+ * Class AbstractDisplayDefinition
  *
  * @author Andy Thorne <contrabandvr@gmail.com>
  */
-abstract class AbstractFieldDisplayDefinition implements FieldDisplayDefinitionInterface
+abstract class AbstractDisplayDefinition implements DisplayDefinitionInterface
 {
     /**
      * {@inheritDoc}

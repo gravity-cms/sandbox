@@ -3,17 +3,13 @@
 
 namespace Gravity\CmsBundle\DependencyInjection\Compiler;
 
-use Gravity\CmsBundle\DependencyInjection\Gravity\NodeConfiguration;
 use Gravity\CmsBundle\Field\FieldDefinitionInterface;
 use Gravity\CmsBundle\Field\FieldDisplayDefinitionInterface;
 use Gravity\CmsBundle\Field\FieldWidgetDefinitionInterface;
-use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class FieldCompilerPass
@@ -40,7 +36,6 @@ class FieldCompilerPass implements CompilerPassInterface
         // build a set of instances of the field definitions so we can pre-process resolve all the field's options
         $fieldDefinitions        = [];
         $fieldWidgetDefinitions  = [];
-        $fieldDisplayDefinitions = [];
 
         // field definitions
         $fieldTags = $container->findTaggedServiceIds('gravity_cms.field');
@@ -61,7 +56,7 @@ class FieldCompilerPass implements CompilerPassInterface
 
         // field widget definitions
         $fieldWidgetTags = $container->findTaggedServiceIds('gravity_cms.field.widget');
-        $stylesheets = [];
+        $stylesheets     = [];
         foreach ($fieldWidgetTags as $sid => $tags) {
             $fieldManagerDefinition->addMethodCall(
                 'addFieldWidgetDefinition',
@@ -77,29 +72,7 @@ class FieldCompilerPass implements CompilerPassInterface
             $fieldWidgetDefinitions[$fieldWidgetDefinition->getName()] = $fieldWidgetDefinition;
 
             // TODO: add all widgets into a assetic formula
-            foreach($fieldWidgetDefinition->getAssetLibraries() as $library) {
-                $stylesheets = array_merge($stylesheets, $library->getStylesheets());
-            }
-        }
-
-        // field display definitions
-        $fieldDisplayTags = $container->findTaggedServiceIds('gravity_cms.field.display');
-        foreach ($fieldDisplayTags as $sid => $tags) {
-            $fieldManagerDefinition->addMethodCall(
-                'addFieldDisplayDefinition',
-                [
-                    new Reference($sid)
-                ]
-            );
-
-            $fieldDisplayDefinitionDefinition = $container->findDefinition($sid);
-            $fieldDisplayDefinitionClass      = $fieldDisplayDefinitionDefinition->getClass();
-            /** @var FieldDisplayDefinitionInterface $fieldDisplayDefinition */
-            $fieldDisplayDefinition                                     = new $fieldDisplayDefinitionClass();
-            $fieldDisplayDefinitions[$fieldDisplayDefinition->getName()] = $fieldDisplayDefinition;
-
-            // TODO: add all widgets into a assetic formula
-            foreach($fieldDisplayDefinition->getAssetLibraries() as $library) {
+            foreach ($fieldWidgetDefinition->getAssetLibraries() as $library) {
                 $stylesheets = array_merge($stylesheets, $library->getStylesheets());
             }
         }
@@ -120,8 +93,7 @@ class FieldCompilerPass implements CompilerPassInterface
 
         $nodeTypes = $container->getParameter('gravity_cms.node_types');
 
-        $configuration = new NodeConfiguration();
-        $processor     = new Processor();
+        $nodeFieldConfigs = $container->getParameter('gravity_cms.node_configs');
 
         $fieldMappings = [];
 
@@ -133,45 +105,33 @@ class FieldCompilerPass implements CompilerPassInterface
             $fieldMappings[$nodeClass] = [];
 
             // generate a sonata admin service for the node
-            $adminServiceName       = 'gravity_cms.admin.' . strtolower($nodeClassRefl->getShortName());
-            $adminServiceDefinition = $container->register($adminServiceName, $nodeConfig['admin']['class']);
-            $adminServiceDefinition->setArguments(
-                [
-                    null,
-                    $nodeClass,
-                    null,
-                ]
-            );
+            $adminServiceName = 'gravity_cms.admin.' . strtolower($nodeClassRefl->getShortName());
+            if ($container->has($adminServiceName)) {
+                $adminServiceDefinition = $container->findDefinition($adminServiceName);
+            } else {
+                $adminServiceDefinition = $container->register($adminServiceName, $nodeConfig['admin']['class']);
+                $adminServiceDefinition->setArguments(
+                    [
+                        null,
+                        $nodeClass,
+                        null,
+                    ]
+                );
 
-            $adminServiceDefinition->addTag(
-                'sonata.admin',
-                [
-                    'manager_type' => 'orm',
-                    'group'        => $nodeConfig['admin']['category'] ?: 'Content',
-                    'label'        => $nodeConfig['admin']['label'] ?: $nodeClassRefl->getShortName(),
-                ]
-            );
+                $adminServiceDefinition->addTag(
+                    'sonata.admin',
+                    [
+                        'manager_type' => 'orm',
+                        'group'        => $nodeConfig['admin']['category'] ?: 'Content',
+                        'label'        => $nodeConfig['admin']['label'] ?: $nodeClassRefl->getShortName(),
+                    ]
+                );
+            }
 
             $adminServiceDefinition->addMethodCall('setFieldManager', [new Reference('gravity_cms.field_manager')]);
             $adminServiceDefinition->addMethodCall('setTokenStorage', [new Reference('security.token_storage')]);
 
-            $mappingFile =
-                dirname(dirname($nodeClassRefl->getFileName())) . '/Resources/config/gravity/' .
-                $nodeClassRefl->getShortName() .
-                '.node.yml';
-
-            if (!file_exists($mappingFile)) {
-                throw new RuntimeException("YAML mapping file not found for '{$nodeClass}' ({$mappingFile})");
-            }
-
-            $config = Yaml::parse(file_get_contents($mappingFile));
-
-            $nodeFieldConfig = $processor->processConfiguration(
-                $configuration,
-                [
-                    $config,
-                ]
-            );
+            $nodeFieldConfig = $nodeFieldConfigs[$nodeClass];
 
             foreach ($nodeFieldConfig['fields'] as $name => $options) {
                 $options['options'] = $this->resolveFieldOptions(
@@ -179,17 +139,10 @@ class FieldCompilerPass implements CompilerPassInterface
                     $options['options']
                 );
 
-                $options['widget']['options']     = $this->resolveFieldWidgetOptions(
+                $options['widget']['options'] = $this->resolveFieldWidgetOptions(
                     $fieldWidgetDefinitions[$options['widget']['type']],
                     $options['widget']['options']
                 );
-
-                if($options['display']['type']) {
-                    $options['display']['options'] = $this->resolveFieldDisplayOptions(
-                        $fieldDisplayDefinitions[$options['display']['type']],
-                        $options['display']['options']
-                    );
-                }
 
                 $fieldMappings[$nodeClass][$name] = $options;
             }
@@ -264,8 +217,10 @@ class FieldCompilerPass implements CompilerPassInterface
      *
      * @return array
      */
-    protected function resolveFieldDisplayOptions(FieldDisplayDefinitionInterface $fieldDisplayDefinition, array $options)
-    {
+    protected function resolveFieldDisplayOptions(
+        FieldDisplayDefinitionInterface $fieldDisplayDefinition,
+        array $options
+    ) {
         $resolver = new OptionsResolver();
         $resolver->setDefaults(
             [

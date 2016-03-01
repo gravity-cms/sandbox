@@ -3,9 +3,9 @@
 
 namespace Gravity\CmsBundle\Field\Type\Boolean\Display;
 
+use Gravity\CmsBundle\Display\Type\AbstractDisplayDefinition;
 use Gravity\CmsBundle\Entity\Field;
 use Gravity\CmsBundle\Entity\FieldBoolean;
-use Gravity\CmsBundle\Field\AbstractFieldDisplayDefinition;
 use Gravity\CmsBundle\Field\FieldDefinitionInterface;
 use Gravity\CmsBundle\Field\Type\Boolean\BooleanField;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author Andy Thorne <contrabandvr@gmail.com>
  */
-class BooleanDisplay extends AbstractFieldDisplayDefinition
+class BooleanDisplay extends AbstractDisplayDefinition
 {
     /**
      * @inheritDoc

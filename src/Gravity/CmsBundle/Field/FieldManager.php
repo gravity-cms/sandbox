@@ -23,11 +23,6 @@ class FieldManager
     protected $fieldWidgetDefinitions = [];
 
     /**
-     * @var FieldDisplayDefinitionInterface[]
-     */
-    protected $fieldDisplayDefinitions = [];
-
-    /**
      * @var array
      */
     protected $entityFieldMappings = [];
@@ -98,40 +93,6 @@ class FieldManager
     public function addFieldWidgetDefinition(FieldWidgetDefinitionInterface $fieldWidgetDefinition)
     {
         $this->fieldWidgetDefinitions[$fieldWidgetDefinition->getName()] = $fieldWidgetDefinition;
-    }
-
-    /**
-     * @return FieldDisplayDefinitionInterface[]
-     */
-    public function getFieldDisplayDefinitions()
-    {
-        return $this->fieldDisplayDefinitions;
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return FieldDisplayDefinitionInterface
-     */
-    public function getFieldDisplayDefinition($name)
-    {
-        return $this->fieldDisplayDefinitions[$name];
-    }
-
-    /**
-     * @param FieldDisplayDefinitionInterface[] $fieldDisplayDefinitions
-     */
-    public function setFieldDisplayDefinitions($fieldDisplayDefinitions)
-    {
-        $this->fieldDisplayDefinitions = $fieldDisplayDefinitions;
-    }
-
-    /**
-     * @param FieldDisplayDefinitionInterface $fieldDisplayDefinition
-     */
-    public function addFieldDisplayDefinition(FieldDisplayDefinitionInterface $fieldDisplayDefinition)
-    {
-        $this->fieldDisplayDefinitions[$fieldDisplayDefinition->getName()] = $fieldDisplayDefinition;
     }
 
     /**

@@ -3,9 +3,9 @@
 
 namespace Gravity\CmsBundle\Field\Type\Text\Display\Formatted;
 
+use Gravity\CmsBundle\Display\Type\AbstractDisplayDefinition;
 use Gravity\CmsBundle\Entity\Field;
 use Gravity\CmsBundle\Entity\FieldText;
-use Gravity\CmsBundle\Field\AbstractFieldDisplayDefinition;
 use Gravity\CmsBundle\Field\FieldDefinitionInterface;
 
 /**
@@ -13,7 +13,7 @@ use Gravity\CmsBundle\Field\FieldDefinitionInterface;
  *
  * @author Andy Thorne <contrabandvr@gmail.com>
  */
-class FormattedDisplay extends AbstractFieldDisplayDefinition
+class FormattedDisplay extends AbstractDisplayDefinition
 {
     /**
      * {@inheritDoc}

@@ -3,9 +3,9 @@
 
 namespace Gravity\CmsBundle\Field\Type\Reference\Display\Link;
 
+use Gravity\CmsBundle\Display\Type\AbstractDisplayDefinition;
 use Gravity\CmsBundle\Entity\FieldableEntity;
 use Gravity\CmsBundle\Entity\Node;
-use Gravity\CmsBundle\Field\AbstractFieldDisplayDefinition;
 use Gravity\CmsBundle\Field\FieldDefinitionInterface;
 use Gravity\CmsBundle\Field\Type\Reference\ReferenceField;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Router;
  *
  * @author Andy Thorne <contrabandvr@gmail.com>
  */
-class LinkDisplay extends AbstractFieldDisplayDefinition
+class LinkDisplay extends AbstractDisplayDefinition
 {
     /**
      * @var Router
@@ -65,17 +65,17 @@ class LinkDisplay extends AbstractFieldDisplayDefinition
 
     /**
      * @param FieldableEntity|Node $entity
-     * @param array           $options
+     * @param array                $options
      *
      * @return array
      */
     public function getTemplateOptions($entity, array $options)
     {
-        if(!$entity){
+        if (!$entity) {
             return [];
         }
         $route = $entity->getRoute();
-        $url = $this->router->generate($route->getName(), []);
+        $url   = $this->router->generate($route->getName(), []);
 
         return [
             'url'     => $url,
