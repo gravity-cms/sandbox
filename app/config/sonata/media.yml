@@ -30,6 +30,8 @@ sonata_media:
                 big:   { width: 500 , quality: 70}
                 large: { width: 1150 , quality: 70}
 
+                blog_large:  { width: 750 , quality: 70}
+
     cdn:
         server:
             path: /uploads/media # http://media.sonata-project.org/

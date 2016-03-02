@@ -34,9 +34,9 @@ class ThemeLoader extends FilesystemLoader
         $templateName = (string) $template;
 
         // Only try and load templates which aren't namespaced
-        if (strpos($templateName, '@theme/') === 0) {
+        if (strpos($templateName, '@admin_theme/') === 0) {
 
-            $templatePath = str_replace('@theme', '', $templateName);
+            $templatePath = str_replace('@admin_theme', '', $templateName);
             $theme = $this->themeManager->getAdminTheme();
 
             return parent::findTemplate('@theme_'.$theme->getName().$templatePath);

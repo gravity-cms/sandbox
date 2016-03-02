@@ -13,7 +13,7 @@ display:
       leadImage:
         type: media.sonata
         options:
-          image_style: large
+          image_style: blog_large
       category:
         type: taxonomy_list
       tags:
@@ -27,14 +27,14 @@ display:
         type: media.sonata
         label: false
         options:
-          image_style: large
+          image_style: blog_large
       rating:
         type: number
         options: ~
       galleryImages:
         type: media.sonata
         options:
-          image_style: big
+          image_style: blog_large
       urls:
         type: text.url
         options:

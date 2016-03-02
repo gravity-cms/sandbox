@@ -138,7 +138,6 @@ class ThemeCompilerPass implements CompilerPassInterface
                 $assetFactoryDefinition = $container->findDefinition('assetic.asset_factory');
                 $assetFactoryDefinition->addMethodCall('setThemeManager', [$themeManagerReference]);
 
-
                 // tell asstic where the theme assets are
                 $jsAssets = @glob($path . '/Resources/assets/js/*.js');
                 if (count($jsAssets)) {

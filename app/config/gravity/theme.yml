@@ -1,0 +1,4 @@
+liip_theme:
+    themes: ['gravity']
+    active_theme: 'gravity'
+    load_controllers: false
