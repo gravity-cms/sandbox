@@ -56,6 +56,8 @@ class AppKernel extends Kernel
 
             new Sonata\MediaBundle\SonataMediaBundle(),
             new Liip\ThemeBundle\LiipThemeBundle(),
+
+            new Gravity\MenuBundle\GravityMenuBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

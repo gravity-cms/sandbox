@@ -1,0 +1,26 @@
+services:
+    gravity_menu.admin.menu_item:
+        class: Gravity\MenuBundle\Admin\MenuItemAdmin
+        arguments: [~, Gravity\MenuBundle\Entity\MenuItem, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: System, label: Menu}
+        calls:
+            - ['setMenuManager', [@gravity_menu.menu_manager]]
+
+    gravity_menu.menu_manager:
+        class: Gravity\MenuBundle\Menu\MenuManager
+        arguments:
+            - []
+
+    gravity_menu.menu_builder:
+        class: Gravity\MenuBundle\Menu\MenuBuilder
+        arguments: [@doctrine.orm.default_entity_manager, @knp_menu.factory]
+        tags:
+            - { name: knp_menu.menu_builder, method: createGravityMenu, alias: gravity } # the previous menu
+
+    gravity_menu.serializer.events.route_array:
+        class: Gravity\MenuBundle\Serializer\Event\RouteArraySubscriber
+        arguments:
+            - @router
+        tags:
+            - { name: jms_serializer.event_subscriber }

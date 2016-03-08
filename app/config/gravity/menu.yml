@@ -1,0 +1,6 @@
+gravity_menu:
+  menus:
+    main:
+      label: Main
+    sidebar:
+      label: Sidebar

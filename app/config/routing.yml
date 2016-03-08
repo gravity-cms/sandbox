@@ -1,3 +1,7 @@
+gravity_menu:
+    resource: "@GravityMenuBundle/Resources/config/routing.yml"
+    prefix:   /
+
 gravity_media:
     resource: "@GravityMediaBundle/Resources/config/routing.yml"
     prefix:   /
