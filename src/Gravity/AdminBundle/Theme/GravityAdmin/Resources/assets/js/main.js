@@ -130,7 +130,7 @@
         .on('mouseleave', '.mm-dropdown > a', _handleHover);
 
 
-    var f = (function () {
+    var f = (function (PixelAdmin) {
         PixelAdmin.MainMenu = function () {
             this._screen = null;
             this._last_screen = null;

@@ -5,6 +5,8 @@
  */
 
 (function() {
+  var PixelAdmin = {};
+
   PixelAdmin.MainMenu = function() {
     this._screen = null;
     this._last_screen = null;

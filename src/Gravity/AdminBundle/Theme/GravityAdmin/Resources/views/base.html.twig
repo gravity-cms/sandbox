@@ -98,6 +98,14 @@
         {% for asset_file in require_field_assets() %}
         <script src="{{ asset(asset_file) }}"></script>
         {% endfor %}
+
+        {% javascripts
+            filter="uglifyjs2"
+            "@theme_gravity_admin/Resources/assets/js/main.js"
+        %}
+            <script type="text/javascript" src="{{ asset_url }}" async="true"></script>
+        {% endjavascripts %}
+
     {% endblock %}
 
 </head>
