@@ -34,31 +34,29 @@ class NodeController extends Controller
             throw $this->createNotFoundException("Node '{$nodeId}' not found for type '{$type}'");
         }
 
-        $displayHandlerManager = $this->get('gravity_cms.display_manager');
+//        $this->get('security.')
+        $adminPool = $this->get('sonata.admin.pool');
+        $admin     = $adminPool->getAdminByClass(get_class($node));
 
-        $handler = $displayHandlerManager->getHandlerForNode($node);
-
-        if ($handler->supportsRequest($request)) {
-            return $this->render(
-                $handler->getTemplate(),
-                $handler->getTemplateOptions($node, $displayHandlerManager->getHandlerOptions($handler, $node))
-            );
-        } else {
-            throw new \RuntimeException('Unknown Request Format');
+        if (!$admin->isGranted('VIEW', $node)) {
+            throw $this->createAccessDeniedException();
         }
 
         $format = $request->attributes->get('_format', 'html');
 
         if ($format === 'html') {
-            $fieldMappings = $fieldManager->getEntityFieldMapping(get_class($node));
+            $displayHandlerManager = $this->get('gravity_cms.display_manager');
 
-            return $this->render(
-                'GravityCmsBundle:Node:view.html.twig',
-                [
-                    'node'           => $node,
-                    'field_mappings' => $fieldMappings,
-                ]
-            );
+            $handler = $displayHandlerManager->getHandlerForNode($node);
+
+            if ($handler->supportsRequest($request)) {
+                return $this->render(
+                    $handler->getTemplate(),
+                    $handler->getTemplateOptions($node, $displayHandlerManager->getHandlerOptions($handler, $node))
+                );
+            } else {
+                throw new \RuntimeException('Unknown Request Format');
+            }
         } else {
             $fieldManager = $this->get('gravity_cms.field_manager');
 
