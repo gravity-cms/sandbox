@@ -9,6 +9,9 @@
         </id>
 
         <one-to-many target-entity="Gravity\MediaBundle\Entity\GalleryHasMedia" mapped-by="gallery" field="galleryHasMedias">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
         </one-to-many>
     </entity>
 
