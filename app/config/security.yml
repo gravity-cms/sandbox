@@ -4,6 +4,8 @@ security:
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
         SONATA:
             - ROLE_SONATA_PAGE_ADMIN_PAGE_EDIT  # if you are using acl then this line must be commented
+        IS_AUTHENTICATED_ANONYMOUSLY:
+            - ROLE_GRAVITY_CMS_ADMIN_PAGE_VIEW
 
     providers:
         fos_userbundle:

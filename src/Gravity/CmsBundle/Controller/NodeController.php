@@ -34,13 +34,9 @@ class NodeController extends Controller
             throw $this->createNotFoundException("Node '{$nodeId}' not found for type '{$type}'");
         }
 
-//        $this->get('security.')
-        $adminPool = $this->get('sonata.admin.pool');
-        $admin     = $adminPool->getAdminByClass(get_class($node));
-
-        if (!$admin->isGranted('VIEW', $node)) {
-            throw $this->createAccessDeniedException();
-        }
+        $adminPool   = $this->get('sonata.admin.pool');
+        $entityClass = get_class($node);
+        $admin       = $adminPool->getAdminByClass($entityClass);
 
         $format = $request->attributes->get('_format', 'html');
 
@@ -52,7 +48,12 @@ class NodeController extends Controller
             if ($handler->supportsRequest($request)) {
                 return $this->render(
                     $handler->getTemplate(),
-                    $handler->getTemplateOptions($node, $displayHandlerManager->getHandlerOptions($handler, $node))
+                    $handler->getTemplateOptions(
+                        $node,
+                        $displayHandlerManager->getNodeConfig($entityClass)['options']
+                    ) + [
+                        'admin' => $admin,
+                    ]
                 );
             } else {
                 throw new \RuntimeException('Unknown Request Format');

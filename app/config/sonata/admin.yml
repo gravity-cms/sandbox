@@ -4,6 +4,9 @@ sonata_admin:
         search:              SonataAdminBundle:Core:search.html.twig
         search_result_block: SonataAdminBundle:Block:block_search_result.html.twig
 
+    security:
+        handler: sonata.admin.security.handler.role
+
 sonata_block:
     blocks:
         sonata.admin.block.search_result:
