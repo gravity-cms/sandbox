@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<serializer>
-    <class name="Gravity\CmsBundle\Entity\FieldNumber" exclusion-policy="all">
-        <property name="number" type="double" expose="true" groups="gravity_api_read" />
-    </class>
-</serializer>

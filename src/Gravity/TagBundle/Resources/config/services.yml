@@ -1,5 +1,0 @@
-services:
-  gravity_tag.field.reference.display.taxonomy_list:
-    class: Gravity\TagBundle\Field\Type\Reference\Display\TaxonomyListDisplay
-    tags:
-      - { name: gravity_cms.field.display }

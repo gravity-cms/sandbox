@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<serializer>
-    <class name="Gravity\CmsBundle\Entity\FieldText" exclusion-policy="all">
-        <property name="text" type="string" expose="true" groups="gravity_api_read" />
-        <property name="format" type="string" expose="true" groups="gravity_api_read" />
-    </class>
-</serializer>

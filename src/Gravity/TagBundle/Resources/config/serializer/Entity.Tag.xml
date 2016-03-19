@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<serializer>
-    <class name="Gravity\TagBundle\Entity\Tag" exclusion-policy="all">
-        <property name="name" type="string" expose="true" groups="gravity_api_read" />
-    </class>
-</serializer>

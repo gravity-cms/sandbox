@@ -1,4 +1,0 @@
-gravity_menu_api:
-  type: rest
-  resource: routing/api.yml
-  prefix: /api

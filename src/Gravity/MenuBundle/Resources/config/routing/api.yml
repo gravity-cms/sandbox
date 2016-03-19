@@ -1,6 +1,0 @@
-gravity_menu_api:
-  type: rest
-  resource: Gravity\MenuBundle\Controller\Api\MenuController
-  name_prefix: api_
-  defaults:
-    _sonata_admin: gravity_menu.admin.menu_item

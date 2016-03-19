@@ -1,4 +1,0 @@
-gravity_cms_autocomplete:
-  path: /api/forms/autocomplete/{type}
-  defaults: { _controller: GravityCmsBundle:Api/AutoComplete:autoComplete }
-
