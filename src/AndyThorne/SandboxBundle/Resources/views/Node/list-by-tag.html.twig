@@ -1,0 +1,24 @@
+{% extends 'GravityCmsBundle::frontend.html.twig' %}
+
+{% block title %}{{ tag|e('html')|humanize }} Pages{% endblock title %}
+
+{% block page_title %}{{ tag|e('html')|humanize }} Pages{% endblock %}
+{% block page_subtitle %} {% endblock %}
+
+{% block content %}
+    <h1>{{ tag|e('html')|humanize }} Pages</h1>
+    <p>
+        {{ nodes|length }} Found
+    </p>
+
+    <div class="row">
+        {% set media_options = media_options|default({}) %}
+        {% for node in nodes %}
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <a href="{{ url(node.route.name) }}" class="thumbnail">
+                    {% media node.leadImage.media, 'default_small' with { class: 'img-responsive' } %}
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content %}

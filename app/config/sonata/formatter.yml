@@ -5,28 +5,63 @@ sonata_formatter:
             extensions:
                 - sonata.formatter.twig.control_flow
                 - sonata.formatter.twig.gist
-        #        - sonata.media.formatter.twig
+                - sonata.media.formatter.twig
 
         rawhtml:
             service: sonata.formatter.text.raw
             extensions:
                 - sonata.formatter.twig.control_flow
                 - sonata.formatter.twig.gist
-        #        - sonata.media.formatter.twig
+                - sonata.media.formatter.twig
 
         text:
             service: sonata.formatter.text.text
             extensions:
                 - sonata.formatter.twig.control_flow
                 - sonata.formatter.twig.gist
-        #        - sonata.media.formatter.twig
+                - sonata.media.formatter.twig
 
         markdown:
             service: sonata.formatter.text.markdown
             extensions:
                 - sonata.formatter.twig.control_flow
                 - sonata.formatter.twig.gist
-        #        - sonata.media.formatter.twig #keep this commented unless you are using media bundle.
+                - sonata.media.formatter.twig #keep this commented unless you are using media bundle.
+
+    ckeditor:
+        templates:
+            browser: 'SonataFormatterBundle:Ckeditor:browser.html.twig'
+            upload: 'SonataFormatterBundle:Ckeditor:upload.html.twig'
+
+
+ivory_ck_editor:
+    default_config: default
+    configs:
+        default:
+            # default toolbar plus Format button
+            toolbar:
+            - [Bold, Italic, Underline, -, Cut, Copy, Paste, PasteText, PasteFromWord, -, Undo, Redo, -, NumberedList, BulletedList, -, Outdent, Indent, -, Blockquote, -, Image, Link, Unlink, Table]
+            - [Format, Maximize, Source]
+
+            filebrowserBrowseRoute: admin_gravity_media_media_ckeditor_browser
+            filebrowserBrowseRouteParameters: []
+            filebrowserBrowseRouteAbsolute:   true
+
+            filebrowserImageBrowseRoute: admin_gravity_media_media_ckeditor_browser
+            # Display images by default when clicking the image dialog browse button
+            filebrowserImageBrowseRouteParameters:
+                provider: sonata.media.provider.image
+            filebrowserUploadRoute: admin_gravity_media_media_ckeditor_upload
+            filebrowserUploadRouteParameters:
+                provider: sonata.media.provider.file
+            filebrowserUploadRouteAbsolute: true
+
+            # Upload file as image when sending a file from the image dialog
+            filebrowserImageUploadRoute: admin_gravity_media_media_ckeditor_upload
+            filebrowserImageUploadRouteParameters:
+                provider: sonata.media.provider.image
+                context: default # Optional, to upload in a custom context
+            filebrowserImageUploadRoute: true
 
 twig:
     form:

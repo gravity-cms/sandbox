@@ -1,3 +1,7 @@
-andy_thorne_sandbox_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: AndyThorneSandboxBundle:Default:index }
+andy_thorne_blog_roll:
+    path: /blog
+    defaults:
+        _controller: "GravityCmsBundle:NodeList:list"
+        _entity: AndyThorne\SandboxBundle\Entity\BlogPost
+        _list_template: "AndyThorneSandboxBundle:Node:list.html.twig"
+        _title: "Articles"

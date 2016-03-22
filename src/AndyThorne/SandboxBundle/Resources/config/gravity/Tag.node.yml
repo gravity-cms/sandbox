@@ -13,6 +13,13 @@ fields: ~
 search:
     handler: Gravity\CmsBundle\Search\Handler\TaxonomyHandler
 
+display:
+  handler: node_list
+  options:
+    template: 'AndyThorneSandboxBundle:Node:list-by-tag.html.twig'
+    node_types:
+        'AndyThorne\SandboxBundle\Entity\BlogPost': tags
+
 routing:
-    path: /tag/{title}
+    path: /tag/{name}
     extendable: true

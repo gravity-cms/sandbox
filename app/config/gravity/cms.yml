@@ -20,8 +20,11 @@ sonata_block:
         sonata.admin.block.admin_list:
             contexts:   [admin]
         # Your other blocks
+        sonata.formatter.block.formatter:
 
 gravity_cms:
+    site:
+        name: GravityCMS Demo
     user_entity: AndyThorne\SandboxBundle\Entity\User
     node_types:
         page:
@@ -30,6 +33,13 @@ gravity_cms:
               class: Gravity\CmsBundle\Admin\NodeAdmin
               category: Content
               label: Page
+
+        blog_post:
+            class: AndyThorne\SandboxBundle\Entity\BlogPost
+            admin:
+              class: Gravity\CmsBundle\Admin\NodeAdmin
+              category: Content
+              label: Blog Post
         tag:
             class: AndyThorne\SandboxBundle\Entity\Tag
             admin:
@@ -47,10 +57,11 @@ ivory_ck_editor:
     default_config: default
     configs:
         default:
-            extraPlugins: 'divarea'
-            removeButtons: 'About,Maximize'
-            removePlugins: 'elementspath'
-            scayt_autoStartup: true
+            extraPlugins: 'divarea,wordcount,filebrowser'
+            #removeButtons: 'About,Maximize'
+            #removePlugins: 'elementspath'
+            #scayt_autoStartup: true
+            allowedContent: true
     plugins:
         divarea:
             path: /bundles/gravitycms/vendor/ckeditor-plugins/divarea/

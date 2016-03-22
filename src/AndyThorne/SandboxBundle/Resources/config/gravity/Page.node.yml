@@ -1,5 +1,5 @@
 routing:
-  path: /{category}/{title}
+  path: /{title}
   extendable: true
 
 search:
@@ -8,17 +8,9 @@ search:
 display:
   handler: field
   options:
+    template: 'AndyThorneSandboxBundle:Node:view-page.html.twig'
     fields:
       title: ~
-      leadImage:
-        type: media.sonata
-        options:
-          image_style: blog_large
-      category:
-        type: taxonomy_list
-      tags:
-        type: taxonomy_list
-        options: ~
       body:
         type: text.formatted
         label: false
@@ -28,52 +20,8 @@ display:
         label: false
         options:
           image_style: blog_large
-      rating:
-        type: number
-        options: ~
-      galleryImages:
-        type: media.sonata
-        options:
-          image_style: blog_large
-      urls:
-        type: text.url
-        options:
-          new_tab: true
-          follow: false
-      signedOff:
-        type: boolean
-        options:
-          true_value: Yes
-          false_value: No
-      parent:
-        type: reference.link
-        options:
-          new_tab: false
-          follow: true
 
 fields:
-  category:
-    type: reference
-    options:
-      required: false
-      limit: 1
-      entity: AndyThorne\SandboxBundle\Entity\Category
-    widget:
-      type: select
-      options: ~
-
-  tags:
-    type: reference
-    options:
-      required: false
-      limit: 50
-      entity: AndyThorne\SandboxBundle\Entity\Tag
-    widget:
-      type: autocomplete
-      options:
-        handler: taxonomy
-        allow_new: true
-
   leadImage:
     type: media
     options:
@@ -91,8 +39,8 @@ fields:
     dynamic: true
     options:
       limit: 1
-      char_min: 10
-      char_max: 100
+      char_min: 60
+      char_max: 10000
       # ...
     widget:
       type: text.formatted
@@ -110,70 +58,3 @@ fields:
     widget:
       type: sonata.media
       options: ~
-
-  galleryImages:
-    type: media
-    options:
-      limit: 20
-      entity: Gravity\MediaBundle\Entity\Media
-      provider: sonata.media.provider.image
-      provider_context: default
-    widget:
-      type: gravity.media
-      options:
-        image_preview: big
-
-  rating:
-    type: number
-    dynamic: true
-    options:
-      limit: 1
-      searchable: false
-    widget:
-      type: number.number_box
-      options:
-        default: 1
-
-  urls:
-    type: text
-    dynamic: true
-    options:
-      limit: 3
-      # ...
-    widget:
-      type: text.unformatted
-      options:
-        type: url
-
-  signedOff:
-    type: boolean
-    options:
-      limit: 1
-      searchable: false
-    widget:
-      type: boolean.checkbox
-
-  parent:
-    type: reference
-    options:
-      required: false
-      limit: 1
-      entity: AndyThorne\SandboxBundle\Entity\Page
-    widget:
-      type: select
-      options: ~
-        #expanded: true
-
-  #team:
-  #  type: choice
-  #  dynamic: true
-  #  options:
-  #    choices:
-  #      liverpool: Liverpool
-  #      chelsea: Chelsea
-  #      manu: Man Utd
-  #    multiple: true
-  #  widget:
-  #    type: choice.select
-  #    options:
-  #      expanded: false
