@@ -56,6 +56,7 @@ class AppKernel extends Kernel
 
             new Sonata\MediaBundle\SonataMediaBundle(),
             new Liip\ThemeBundle\LiipThemeBundle(),
+            new Liip\ImagineBundle\LiipImagineBundle(),
 
             new Gravity\MenuBundle\GravityMenuBundle(),
         );

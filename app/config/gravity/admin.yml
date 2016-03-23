@@ -8,6 +8,11 @@ sonata_admin:
     templates:
         # default global templates
         layout:  GravityAdminBundle::gravity_layout.html.twig
+        search:              SonataAdminBundle:Core:search.html.twig
+        search_result_block: SonataAdminBundle:Block:block_search_result.html.twig
+
+    security:
+        handler: sonata.admin.security.handler.role
 
     options:
         use_icheck: false
@@ -38,6 +43,11 @@ sonata_admin:
 
             - bundles/gravitycms/js/form/fields.js
         stylesheets: []
+
+sonata_block:
+    blocks:
+        sonata.admin.block.search_result:
+        #contexts: [admin]
 
 cmf_routing:
   chain:

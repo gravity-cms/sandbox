@@ -1,6 +1,7 @@
 twig:
     form_themes:
-      - GravityMediaBundle:Form:fields.html.twig
+        - GravityMediaBundle:Form:fields.html.twig
+    exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
 
 fos_rest:
     param_fetcher_listener: true
@@ -17,5 +18,86 @@ sensio_framework_extra:
     router:  { annotations: true }
     request: { converters: true }
 
-twig:
-    exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
+doctrine:
+    orm:
+        entity_managers:
+            default:
+                mappings:
+                    SonataMediaBundle: ~
+    dbal:
+        types:
+            json: Sonata\Doctrine\Types\JsonType
+
+sonata_media:
+    # if you don't use default namespace configuration
+    class:
+        media: Gravity\MediaBundle\Entity\Media
+        gallery: Gravity\MediaBundle\Entity\Gallery
+        gallery_has_media: Gravity\MediaBundle\Entity\GalleryHasMedia
+    default_context: default
+    db_driver: doctrine_orm # or doctrine_mongodb, doctrine_phpcr
+    contexts:
+        default:  # the default context is mandatory
+            providers:
+                - sonata.media.provider.dailymotion
+                - sonata.media.provider.youtube
+                - sonata.media.provider.image
+                - sonata.media.provider.file
+
+            formats:
+                small: ~
+                big:   ~
+                large: ~
+
+                blog_large:  ~
+
+    providers:
+        image:
+            thumbnail:  sonata.media.thumbnail.liip_imagine
+        vimeo:
+            thumbnail:  sonata.media.thumbnail.liip_imagine
+        youtube:
+            thumbnail:  sonata.media.thumbnail.liip_imagine
+        dailymotion:
+            thumbnail:  sonata.media.thumbnail.liip_imagine
+
+    cdn:
+        server:
+            path: '' # http://media.sonata-project.org/
+
+    filesystem:
+        local:
+            directory:  %kernel.root_dir%/../web/uploads/media
+            create:     false
+
+    buzz:
+        connector:  sonata.media.buzz.connector.curl
+
+liip_imagine:
+    loaders:
+        default:
+            filesystem:
+                data_root: %kernel.root_dir%/../web/uploads/media
+    controller:
+        filter_action:         'SonataMediaBundle:Media:liipImagineFilter'
+        filter_runtime_action: 'SonataMediaBundle:Media:liipImagineFilter'
+    filter_sets:
+        default_small:
+            quality: 70
+            filters:
+                thumbnail: { size: [100, null], mode: outbound }
+
+        default_big:
+            quality: 70
+            filters:
+                thumbnail: { size: [500, null], mode: outbound }
+
+        default_large:
+            quality: 70
+            filters:
+                thumbnail: { size: [1150, null], mode: outbound }
+
+        default_blog_large:
+            quality: 70
+            filters:
+                thumbnail: { size: [750, null], mode: outbound }
