@@ -1,6 +1,6 @@
-{% extends 'GravityCmsBundle::frontend.html.twig' %}
+{% extends 'GravityCmsBundle:Node:view.html.twig' %}
 
-{% block header_image %}{% path node.leadImage.media, 'large' %}{% endblock %}
+{% block header_image %}{% path node.leadImage.media, 'showpeice' %}{% endblock %}
 
 {% block title %}{{ node.title }}{% endblock title %}
 

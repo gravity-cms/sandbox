@@ -45,11 +45,12 @@ sonata_media:
                 - sonata.media.provider.file
 
             formats:
-                small: ~
-                big:   ~
-                large: ~
+                xsmall:  { width: 425 }
+                small:   { width: 720 }
+                medium:  { width: 940 }
+                large:   { width: 1140 }
 
-                blog_large:  ~
+                showpeice:   { width: 1440}
 
     providers:
         image:
@@ -82,22 +83,27 @@ liip_imagine:
         filter_action:         'SonataMediaBundle:Media:liipImagineFilter'
         filter_runtime_action: 'SonataMediaBundle:Media:liipImagineFilter'
     filter_sets:
+        default_xsmall:
+            quality: 70
+            filters:
+                thumbnail: { size: [425, null], mode: outbound }
+
         default_small:
             quality: 70
             filters:
-                thumbnail: { size: [100, null], mode: outbound }
+                thumbnail: { size: [720, null], mode: outbound }
 
-        default_big:
+        default_medium:
             quality: 70
             filters:
-                thumbnail: { size: [500, null], mode: outbound }
+                thumbnail: { size: [940, null], mode: outbound }
 
         default_large:
             quality: 70
             filters:
                 thumbnail: { size: [1150, null], mode: outbound }
 
-        default_blog_large:
-            quality: 70
+        default_showpeice:
+            quality: 75
             filters:
-                thumbnail: { size: [750, null], mode: outbound }
+                thumbnail: { size: [1140, null], mode: outbound }

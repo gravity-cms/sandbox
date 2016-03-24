@@ -11,9 +11,14 @@ display:
     fields:
       title: ~
       leadImage:
-        type: media.sonata
+        type: media.picture
+        label: false
         options:
-          image_style: blog_large
+          image_styles:
+            300: xsmall
+            720: small
+            940: medium
+            1150: large
       category:
         type: taxonomy_list
       tags:
@@ -27,14 +32,18 @@ display:
         type: media.sonata
         label: false
         options:
-          image_style: blog_large
+          image_style: medium
       rating:
         type: number
         options: ~
       galleryImages:
-        type: media.sonata
+        type: media.picture
         options:
-          image_style: blog_large
+          image_styles:
+            300: xsmall
+            720: small
+            940: medium
+            1150: large
       urls:
         type: text.url
         options:
@@ -85,7 +94,7 @@ fields:
     widget:
       type: gravity.media
       options:
-        image_preview: big
+        image_preview: small
   body:
     type: text
     dynamic: true
@@ -121,7 +130,7 @@ fields:
     widget:
       type: gravity.media
       options:
-        image_preview: big
+        image_preview: small
 
   rating:
     type: number
