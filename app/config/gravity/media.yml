@@ -28,6 +28,15 @@ doctrine:
         types:
             json: Sonata\Doctrine\Types\JsonType
 
+# Sonata Media Bundle requires the classification bundle to be configured. It's just here for necesity until the
+# dependency is removed from upstream
+sonata_classification:
+    class:
+        tag:          Gravity\MediaBundle\Entity\Classification\Tag
+        category:     Gravity\MediaBundle\Entity\Classification\Category
+        collection:   Gravity\MediaBundle\Entity\Classification\Collection
+        context:      Gravity\MediaBundle\Entity\Classification\Context
+
 sonata_media:
     # if you don't use default namespace configuration
     class:
@@ -45,6 +54,8 @@ sonata_media:
                 - sonata.media.provider.file
 
             formats:
+                admin:   { width: 200 }
+
                 xsmall:  { width: 425 }
                 small:   { width: 720 }
                 medium:  { width: 940 }
@@ -68,7 +79,7 @@ sonata_media:
 
     filesystem:
         local:
-            directory:  %kernel.root_dir%/../web/uploads/media
+            directory:  "%kernel.root_dir%/../web/uploads/media"
             create:     false
 
     buzz:
@@ -78,11 +89,16 @@ liip_imagine:
     loaders:
         default:
             filesystem:
-                data_root: %kernel.root_dir%/../web/uploads/media
+                data_root: "%kernel.root_dir%/../web/uploads/media"
     controller:
         filter_action:         'SonataMediaBundle:Media:liipImagineFilter'
         filter_runtime_action: 'SonataMediaBundle:Media:liipImagineFilter'
     filter_sets:
+        admin:
+            quality: 70
+            filters:
+                thumbnail: { size: [200, null], mode: outbound }
+
         default_xsmall:
             quality: 70
             filters:
